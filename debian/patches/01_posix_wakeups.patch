@@ -1,0 +1,114 @@
+=== modified file 'twisted/internet/posixbase.py'
+--- old/twisted/internet/posixbase.py	2011-10-16 19:13:26 +0000
++++ new/twisted/internet/posixbase.py	2011-12-08 03:37:41 +0000
+@@ -265,6 +265,11 @@ class PosixReactorBase(_SignalReactorMix
+             self.removeWriter(selectable)
+             selectable.connectionLost(failure.Failure(why))
+ 
++
++    # Callable that creates a waker, overrideable so that subclasses can
++    # substitute their own implementation:
++    _wakerFactory = _Waker
++
+     def installWaker(self):
+         """
+         Install a `waker' to allow threads and signals to wake up the IO thread.
+@@ -273,7 +278,7 @@ class PosixReactorBase(_SignalReactorMix
+         the reactor. On Windows we use a pair of sockets.
+         """
+         if not self.waker:
+-            self.waker = _Waker(self)
++            self.waker = self._wakerFactory(self)
+             self._internalReaders.add(self.waker)
+             self.addReader(self.waker)
+ 
+
+=== modified file 'twisted/internet/test/test_threads.py'
+--- old/twisted/internet/test/test_threads.py	2011-06-13 22:20:22 +0000
++++ new/twisted/internet/test/test_threads.py	2011-12-08 03:37:41 +0000
+@@ -8,7 +8,7 @@ Tests for implementations of L{IReactorT
+ __metaclass__ = type
+ 
+ from weakref import ref
+-import gc
++import gc, threading
+ 
+ from twisted.python.threadable import isInIOThread
+ from twisted.internet.test.reactormixins import ReactorBuilder
+@@ -104,6 +104,24 @@ class ThreadTestsBuilder(ReactorBuilder)
+         self.assertTrue(after - before < 30)
+ 
+ 
++    def test_callFromThread(self):
++        """
++        A function scheduled with L{IReactorThreads.callFromThread} invoked
++        from another thread is run in the reactor thread.
++        """
++        reactor = self.buildReactor()
++        result = []
++
++        def threadCall():
++            result.append(threading.currentThread())
++            reactor.stop()
++        reactor.callLater(0, reactor.callInThread,
++                          reactor.callFromThread, threadCall)
++        self.runReactor(reactor, 5)
++
++        self.assertEquals(result, [threading.currentThread()])
++
++
+     def test_stopThreadPool(self):
+         """
+         When the reactor stops, L{ReactorBase._stopThreadPool} drops the
+
+=== modified file 'twisted/internet/test/test_time.py'
+--- old/twisted/internet/test/test_time.py	2011-02-14 04:45:15 +0000
++++ new/twisted/internet/test/test_time.py	2011-12-08 03:37:41 +0000
+@@ -7,6 +7,7 @@ Tests for implementations of L{IReactorT
+ 
+ __metaclass__ = type
+ 
++from twisted.python.runtime import platform
+ from twisted.internet.test.reactormixins import ReactorBuilder
+ 
+ 
+@@ -23,4 +24,38 @@ class TimeTestsBuilder(ReactorBuilder):
+         reactor.run()
+ 
+ 
++
++class GlibTimeTestsBuilder(ReactorBuilder):
++    """
++    Builder for defining tests relating to L{IReactorTime} for reactors based
++    off glib.
++    """
++    if platform.isWindows():
++        _reactors = ["twisted.internet.gtk2reactor.PortableGtkReactor"]
++    else:
++        _reactors = ["twisted.internet.glib2reactor.Glib2Reactor",
++                     "twisted.internet.gtk2reactor.Gtk2Reactor"]
++
++    def test_timeout_add(self):
++        """
++        A C{reactor.callLater} call scheduled from a C{gobject.timeout_add}
++        call is run on time.
++        """
++        import gobject
++        reactor = self.buildReactor()
++
++        result = []
++        def gschedule():
++            reactor.callLater(0, callback)
++            return 0
++        def callback():
++            result.append(True)
++            reactor.stop()
++
++        reactor.callWhenRunning(gobject.timeout_add, 10, gschedule)
++        self.runReactor(reactor, 5)
++        self.assertEqual(result, [True])
++
++
+ globals().update(TimeTestsBuilder.makeTestCaseClasses())
++globals().update(GlibTimeTestsBuilder.makeTestCaseClasses())
+
