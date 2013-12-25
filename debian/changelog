@@ -1,3 +1,9 @@
+twisted (11.1.0-1ubuntu2pexip1) pexip; urgency=low
+
+  * Prepare Pexip packaging
+
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 25 Dec 2013 04:54:39 +0000
+
 twisted (11.1.0-1ubuntu2) precise; urgency=low
 
   * debian/patches/01_posix_wakeups.patch:
