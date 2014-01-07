@@ -4,7 +4,7 @@
 
 
 """
-SSL transport. Requires PyOpenSSL (http://pyopenssl.sf.net).
+SSL transport. Requires PyOpenSSL (http://pypi.python.org/pypi/pyOpenSSL).
 
 SSL connections require a ContextFactory so they can create SSL contexts.
 End users should only use the ContextFactory classes directly - for SSL
@@ -19,11 +19,13 @@ Future Plans:
     - split module so reactor-specific classes are in a separate module
 """
 
+from __future__ import division, absolute_import
+
 # System imports
 from OpenSSL import SSL
 supported = True
 
-from zope.interface import implements, implementsOnly, implementedBy
+from zope.interface import implementer, implementer_only, implementedBy
 
 # Twisted imports
 from twisted.internet import tcp, interfaces
@@ -115,13 +117,13 @@ class ClientContextFactory:
 
 
 
+@implementer_only(interfaces.ISSLTransport,
+                 *[i for i in implementedBy(tcp.Client)
+                   if i != interfaces.ITLSTransport])
 class Client(tcp.Client):
     """
     I am an SSL client.
     """
-
-    implementsOnly(interfaces.ISSLTransport,
-                   *[i for i in implementedBy(tcp.Client) if i != interfaces.ITLSTransport])
 
     def __init__(self, host, port, bindAddress, ctxFactory, connector, reactor=None):
         # tcp.Client.__init__ depends on self.ctxFactory being set
@@ -135,11 +137,11 @@ class Client(tcp.Client):
 
 
 
+@implementer(interfaces.ISSLTransport)
 class Server(tcp.Server):
     """
     I am an SSL server.
     """
-    implements(interfaces.ISSLTransport)
 
     def __init__(self, *args, **kwargs):
         tcp.Server.__init__(self, *args, **kwargs)
@@ -159,6 +161,10 @@ class Port(tcp.Port):
         tcp.Port.__init__(self, port, factory, backlog, interface, reactor)
         self.ctxFactory = ctxFactory
 
+        # Force some parameter checking in pyOpenSSL.  It's better to fail now
+        # than after we've set up the transport.
+        ctxFactory.getContext()
+
 
     def _getLogPrefix(self, factory):
         """
@@ -173,6 +179,10 @@ class Connector(tcp.Connector):
     def __init__(self, host, port, factory, contextFactory, timeout, bindAddress, reactor=None):
         self.contextFactory = contextFactory
         tcp.Connector.__init__(self, host, port, factory, timeout, bindAddress, reactor)
+
+        # Force some parameter checking in pyOpenSSL.  It's better to fail now
+        # than after we've set up the transport.
+        contextFactory.getContext()
 
 
     def _makeTransport(self):

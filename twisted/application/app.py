@@ -116,19 +116,9 @@ class HotshotRunner(_BasicProfiler):
             s = hotshot.stats.load(self.profileOutput)
             s.strip_dirs()
             s.sort_stats(-1)
-            if getattr(s, 'stream', None) is not None:
-                # Python 2.5 and above supports a stream attribute
-                s.stream = open(self.profileOutput, 'w')
-                s.print_stats()
-                s.stream.close()
-            else:
-                # But we have to use a trick for Python < 2.5
-                tmp, sys.stdout = sys.stdout, open(self.profileOutput, 'w')
-                try:
-                    s.print_stats()
-                finally:
-                    sys.stdout, tmp = tmp, sys.stdout
-                    tmp.close()
+            s.stream = open(self.profileOutput, 'w')
+            s.print_stats()
+            s.stream.close()
 
 
 
@@ -650,12 +640,6 @@ def run(runApp, ServerOptions):
         print "%s: %s" % (sys.argv[0], ue)
     else:
         runApp(config)
-
-
-
-def initialLog():
-    AppLogger({})._initialLog()
-initialLog = deprecated(Version("Twisted", 8, 2, 0))(initialLog)
 
 
 
