@@ -5,6 +5,8 @@
 Tests for implementations of L{IReactorCore}.
 """
 
+from __future__ import division, absolute_import
+
 __metaclass__ = type
 
 import signal
@@ -134,15 +136,15 @@ class SystemEventTestsBuilder(ReactorBuilder):
         reactor.addSystemEventTrigger("before", "startup", beforeStartup)
         reactor.addSystemEventTrigger("after", "startup", afterStartup)
 
-        sawPhase = [None]
+        sawPhase = []
         def fakeSignal(signum, action):
-            sawPhase[0] = phase[0]
+            sawPhase.append(phase[0])
         self.patch(signal, 'signal', fakeSignal)
         reactor.callWhenRunning(reactor.stop)
         self.assertEqual(phase[0], None)
-        self.assertEqual(sawPhase[0], None)
+        self.assertEqual(sawPhase, [])
         self.runReactor(reactor)
-        self.assertEqual(sawPhase[0], "before")
+        self.assertIn("before", sawPhase)
         self.assertEqual(phase[0], "after")
 
 
@@ -268,7 +270,7 @@ class SystemEventTestsBuilder(ReactorBuilder):
         reactor.iterate(0) # Shouldn't block
         elapsed = time.time() - start
 
-        self.failUnless(elapsed < 2)
+        self.assertTrue(elapsed < 2)
         t.cancel()
 
 

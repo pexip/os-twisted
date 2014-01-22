@@ -5,6 +5,8 @@
 Test cases for L{twisted.python.randbytes}.
 """
 
+from __future__ import division, absolute_import
+
 import os
 
 from twisted.trial import unittest
@@ -50,7 +52,7 @@ class SecureRandomTestCase(SecureRandomTestCaseBase, unittest.TestCase):
 
 
 class ConditionalSecureRandomTestCase(SecureRandomTestCaseBase,
-                                      unittest.TestCase):
+                                      unittest.SynchronousTestCase):
     """
     Test random sources one by one, then remove it to.
     """
@@ -77,25 +79,12 @@ class ConditionalSecureRandomTestCase(SecureRandomTestCaseBase,
         self._check(self.factory._osUrandom)
 
 
-    def test_fileUrandom(self):
-        """
-        L{RandomFactory._fileUrandom} should work as a random source whenever
-        C{/dev/urandom} is available.
-        """
-        try:
-            self._check(self.factory._fileUrandom)
-        except randbytes.SourceNotAvailable:
-            # The test should only fail in /dev/urandom doesn't exist
-            self.assertFalse(os.path.exists('/dev/urandom'))
-
-
     def test_withoutAnything(self):
         """
         Remove all secure sources and assert it raises a failure. Then try the
         fallback parameter.
         """
         self.factory._osUrandom = self.errorFactory
-        self.factory._fileUrandom = self.errorFactory
         self.assertRaises(randbytes.SecureRandomNotAvailable,
                           self.factory.secureRandom, 18)
         def wrapper():
@@ -110,7 +99,7 @@ class ConditionalSecureRandomTestCase(SecureRandomTestCaseBase,
 
 
 
-class RandomTestCaseBase(SecureRandomTestCaseBase, unittest.TestCase):
+class RandomTestCaseBase(SecureRandomTestCaseBase, unittest.SynchronousTestCase):
     """
     'Normal' random test cases.
     """
