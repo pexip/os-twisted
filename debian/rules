@@ -9,7 +9,8 @@ PY3VERS	:= $(shell py3versions -vs)
 VER3	:= $(shell /usr/bin/python3 -c 'import sys; print(sys.version[:3])')
 DEBVERS := $(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
 
-twversion := $(subst twisted-,,$(notdir $(CURDIR)))
+# twversion := $(subst twisted-,,$(notdir $(CURDIR)))
+twversion := 13.2.0
 
 include /usr/share/python/python.mk
 
@@ -184,18 +185,18 @@ endif
 
 install-nover:
 	: # man pages
-	for i in conch core lore mail; do \
-	    mkdir -p debian/python-twisted-$$i/usr/share/man/man1; \
-	    for j in doc/$$i/man/*.1; do \
-	        cp -p $$j debian/python-twisted-$$i/usr/share/man/man1/; \
-	    done; \
-	done
+	#for i in conch core lore mail; do \
+	#    mkdir -p debian/python-twisted-$$i/usr/share/man/man1; \
+	#    for j in doc/$$i/man/*.1; do \
+	#        cp -p $$j debian/python-twisted-$$i/usr/share/man/man1/; \
+	#    done; \
+	#done
 
 	: # python-twisted-conch
 	mv debian/python-twisted-conch/usr/bin/cftp \
 		debian/python-twisted-conch/usr/bin/conchftp
-	mv debian/python-twisted-conch/usr/share/man/man1/cftp.1 \
-		debian/python-twisted-conch/usr/share/man/man1/conchftp.1
+	#mv debian/python-twisted-conch/usr/share/man/man1/cftp.1 \
+	#	debian/python-twisted-conch/usr/share/man/man1/conchftp.1
 
 	: # twisted-doc
 	mkdir -p debian/twisted-doc/usr/share/doc/twisted-doc
