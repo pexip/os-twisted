@@ -26,6 +26,7 @@ from twisted.test.proto_helpers import RaisingMemoryReactor, StringTransport
 from twisted.python.failure import Failure
 from twisted.python.systemd import ListenFDs
 from twisted.python.filepath import FilePath
+from twisted.python.runtime import platform
 from twisted.python import log
 from twisted.protocols import basic
 from twisted.internet.task import Clock
@@ -50,8 +51,9 @@ if not _PY3:
 
 try:
     from twisted.test.test_sslverify import makeCertificate
-    from twisted.internet.ssl import CertificateOptions, Certificate, \
-        KeyPair, PrivateCertificate
+    from twisted.internet.ssl import PrivateCertificate, Certificate
+    from twisted.internet.ssl import CertificateOptions, KeyPair
+    from twisted.internet.ssl import DiffieHellmanParameters
     from OpenSSL.SSL import ContextType, SSLv23_METHOD, TLSv1_METHOD
     testCertificate = Certificate.loadPEM(pemPath.getContent())
     testPrivateCertificate = PrivateCertificate.loadPEM(pemPath.getContent())
@@ -684,6 +686,24 @@ class StandardIOEndpointsTestCase(unittest.TestCase):
             stdioOb.loseConnection()
 
         return d.addCallback(checkAddress)
+
+
+    def test_StdioIOReceivesCorrectReactor(self):
+        """
+        The reactor passed to the endpoint is the one that the readers are
+        added to.
+        """
+        reactor = MemoryReactor()
+        ep = endpoints.StandardIOEndpoint(reactor)
+        d = ep.listen(StdioFactory())
+
+        def checkReaders(stdioOb):
+            if platform.isWindows():
+                self.assertEqual(stdioOb.reactor, reactor)
+            else:
+                self.assertIn(stdioOb._reader, reactor.getReaders())
+
+        return d.addCallback(checkReaders)
 
 
 
@@ -2418,10 +2438,28 @@ class ServerStringTests(unittest.TestCase):
         )
 
 
+    def test_sslDHparameters(self):
+        """
+        If C{dhParameters} are specified, they are passed as
+        L{DiffieHellmanParameters} into L{CertificateOptions}.
+        """
+        fileName = b'someFile'
+        reactor = object()
+        server = endpoints.serverFromString(
+            reactor,
+            "ssl:4321:privateKey={0}:certKey={1}:dhParameters={2}"
+            .format(escapedPEMPathName, escapedPEMPathName, fileName)
+        )
+        cf = server._sslContextFactory
+        self.assertIsInstance(cf.dhParameters, DiffieHellmanParameters)
+        self.assertEqual(FilePath(fileName), cf.dhParameters._dhFile)
+
+
     if skipSSL:
         test_ssl.skip = test_sslWithDefaults.skip = skipSSL
         test_sslChainLoads.skip = skipSSL
         test_sslChainFileMustContainCert.skip = skipSSL
+        test_sslDHparameters = skipSSL
 
 
     def test_unix(self):
