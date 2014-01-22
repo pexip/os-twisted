@@ -1,0 +1,30 @@
+Description: Use new io_add_watch api on new versions of pygobject.
+Bug: https://twistedmatrix.com/trac/ticket/6369
+Author: Rodney Dawes <rodney.dawes@canonical.com>
+
+=== modified file 'twisted/internet/_glibbase.py'
+Index: b/twisted/internet/_glibbase.py
+===================================================================
+--- a/twisted/internet/_glibbase.py
++++ b/twisted/internet/_glibbase.py
+@@ -157,9 +157,17 @@
+         else:
+             fileno = source
+             wrapper = callback
+-        return self._glib.io_add_watch(
+-            fileno, condition, wrapper,
+-            priority=self._glib.PRIORITY_DEFAULT_IDLE)
++        try:
++            from gi import version_info as gi_version
++        except ImportError:
++            gi_version = (2, 32, 0)
++        if gi_version < (3, 7, 3):
++            return self._glib.io_add_watch(
++                fileno, condition, wrapper,
++                priority=self._glib.PRIORITY_DEFAULT_IDLE)
++        else:
++            return self._glib.io_add_watch(
++                fileno, self._glib.PRIORITY_DEFAULT, condition, wrapper)
+ 
+ 
+     def _ioEventCallback(self, source, condition):

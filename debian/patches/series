@@ -1,3 +1,5 @@
-00_gi_gtk3reactor.patch
-01_posix_wakeups.patch
 tap2deb.diff
+#python3.diff
+#python3_modules.diff
+lp1102685.diff
+lp1098127.diff

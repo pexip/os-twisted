@@ -1,23 +1,116 @@
-twisted (11.1.0-1ubuntu2pexip1) pexip; urgency=low
+twisted (13.2.0-1ubuntu1pexip1) pexip; urgency=low
 
   * Prepare Pexip packaging
 
- -- John-Mark Bell <jmb@pexip.com>  Wed, 25 Dec 2013 04:54:39 +0000
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 22 Jan 2014 18:44:39 +0000
 
-twisted (11.1.0-1ubuntu2) precise; urgency=low
+twisted (13.2.0-1ubuntu1) trusty; urgency=medium
 
-  * debian/patches/01_posix_wakeups.patch:
-    - Backport wakeup change from trunk gtk2refactoring (LP: #935756)
+  * Merge with Debian; remaining changes:
+    - Keep the preliminary python3 support, but don't enable it.
+    - Try to use plain pygtkcompat and fall back to gi.pygtkcompat, to
+      avoid a DeprecationWarning, and a crash.
+    - Use new io_add_watch api on new versions of pygobject.
 
- -- Rodney Dawes <rodney.dawes@ubuntu.com>  Thu, 08 Mar 2012 11:25:48 -0500
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 08 Jan 2014 00:19:41 +0100
 
-twisted (11.1.0-1ubuntu1) precise; urgency=low
+twisted (13.2.0-1) unstable; urgency=medium
 
-  * debian/patches/00_gi_gtk3reactor.patch:
-    - Backport gireactor/gtk3reactor and gtk2reactor refactor from svn
-      (LP: #571648, LP: #851187)
+  * New upstream release.
 
- -- Rodney Dawes <rodney.dawes@ubuntu.com>  Wed, 15 Feb 2012 21:39:07 -0500
+ -- Matthias Klose <doko@debian.org>  Tue, 07 Jan 2014 23:52:50 +0100
+
+twisted (13.1.0-1) unstable; urgency=low
+
+  * New upstream release
+  * Migrate to single-source
+
+ -- Free Ekanayaka <freee@debian.org>  Fri, 04 Oct 2013 14:20:11 +0200
+
+twisted (13.0.0-1ubuntu1) saucy; urgency=low
+
+  * Merge with Debian; remaining changes:
+    - Keep the preliminary python3 support, but don't enable it.
+    - Try to use plain pygtkcompat and fall back to gi.pygtkcompat, to
+      avoid a DeprecationWarning, and a crash.
+    - Use new io_add_watch api on new versions of pygobject.
+    - Point html documentation to the generated api docs.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 20 Jun 2013 13:30:20 +0200
+
+twisted (13.0.0-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Free Ekanayaka <freee@debian.org>  Wed, 05 Jun 2013 20:48:54 +0200
+
+twisted (12.3.0-1ubuntu6) raring; urgency=low
+
+  * Stop building the python3 packages (will be built from a separate
+    source until the python3 support is complete).
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 04 Apr 2013 10:14:52 +0200
+
+twisted (12.3.0-1ubuntu5) raring; urgency=low
+
+  * debian/patches/lp1098127.diff:
+    - Use new io_add_watch api on new versions of pygobject. (LP: #1098127)
+
+ -- Rodney Dawes <rodney.dawes@ubuntu.com>  Thu, 14 Mar 2013 17:24:59 -0400
+
+twisted (12.3.0-1ubuntu4) raring; urgency=low
+
+  * debian/patches/lp1102685.diff:
+    - Try to use plain pygtkcompat and fall back to gi.pygtkcompat, to
+      avoid a DeprecationWarning, and a crash. (LP: #1102685)
+
+ -- Rodney Dawes <rodney.dawes@ubuntu.com>  Wed, 23 Jan 2013 12:19:06 -0500
+
+twisted (12.3.0-1ubuntu3) raring; urgency=low
+
+  * Explicitly call 2to3 to build the py3k source.
+
+ -- Matthias Klose <doko@debian.org>  Wed, 23 Jan 2013 11:41:25 +0100
+
+twisted (12.3.0-1ubuntu2) raring; urgency=low
+
+  * Port Py_InitModule* calls to PyModule_Create for python3.
+
+ -- Adam Conrad <adconrad@ubuntu.com>  Mon, 21 Jan 2013 13:43:44 -0700
+
+twisted (12.3.0-1ubuntu1) raring; urgency=low
+
+  * Build python3 packages.
+  * Add '3' as the suffix for the binaries using python3.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 16 Jan 2013 17:44:26 +0100
+
+twisted (12.3.0-1) experimental; urgency=low
+
+  * New upstream release
+  * Bump python-zope.interface dependency to 3.6
+  * Bump Standards-Version to 3.9.4
+  * Install _initgroups.so only on Python <= 2.6
+  * Drop packaging tweaks for Python < 2.6
+
+ -- Free Ekanayaka <freee@debian.org>  Wed, 02 Jan 2013 15:15:18 +0100
+
+twisted (12.2.0-1) experimental; urgency=low
+
+  * New upstream version
+  * Drop the _epoll.so C extension, as Twisted now supports only
+    Python >= 2.6 and there's stdlib support for epoll since 2.6
+  * Add sendmsg.so C extension to python-twisted-bin
+
+ -- Free Ekanayaka <freee@debian.org>  Tue, 11 Sep 2012 10:06:25 +0200
+
+twisted (12.0.0-1) sid; urgency=low
+
+  * New upstream version.
+  * Add watch file
+  * Bump Standards-Version
+
+ -- Free Ekanayaka <freee@debian.org>  Tue, 17 Apr 2012 15:36:37 +0200
 
 twisted (11.1.0-1) unstable; urgency=low
 
