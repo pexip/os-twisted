@@ -10,15 +10,21 @@ from __future__ import division, absolute_import
 
 import itertools
 
+from zope.interface import implementer
+
 try:
     from OpenSSL import SSL
     from OpenSSL.crypto import PKey, X509
     from OpenSSL.crypto import TYPE_RSA
     from twisted.internet import _sslverify as sslverify
+
+    skipSSL = False
 except ImportError:
-    pass
+    skipSSL = "OpenSSL is required for SSL tests."
 
 from twisted.python.compat import nativeString
+from twisted.python.constants import NamedConstant, Names
+from twisted.python.filepath import FilePath
 from twisted.trial import unittest
 from twisted.internet import protocol, defer, reactor
 
@@ -81,7 +87,7 @@ def counter(counter=itertools.count()):
 
 def makeCertificate(**kw):
     keypair = PKey()
-    keypair.generate_key(TYPE_RSA, 512)
+    keypair.generate_key(TYPE_RSA, 768)
 
     certificate = X509()
     certificate.gmtime_adj_notBefore(0)
@@ -137,6 +143,8 @@ class FakeContext(object):
     @ivar _sessionID: Set by L{set_session_id}.
     @ivar _extraCertChain: Accumulated C{list} of all extra certificates added
         by L{add_extra_chain_cert}.
+    @ivar _cipherList: Set by L{set_cipher_list}.
+    @ivar _dhFilename: Set by L{load_tmp_dh}.
     """
     _options = 0
 
@@ -168,9 +176,18 @@ class FakeContext(object):
     def add_extra_chain_cert(self, cert):
         self._extraCertChain.append(cert)
 
+    def set_cipher_list(self, cipherList):
+        self._cipherList = cipherList
+
+    def load_tmp_dh(self, dhfilename):
+        self._dhFilename = dhfilename
+
 
 
 class OpenSSLOptions(unittest.TestCase):
+    if skipSSL:
+        skip = skipSSL
+
     serverPort = clientConn = None
     onServerLost = onClientLost = None
 
@@ -369,6 +386,108 @@ class OpenSSLOptions(unittest.TestCase):
         )
         ctx = opts.getContext()
         self.assertIsInstance(ctx, SSL.Context)
+
+
+    def test_acceptableCiphersAreAlwaysSet(self):
+        """
+        If the user doesn't supply custom acceptable ciphers, a shipped secure
+        default is used.  We can't check directly for it because the effective
+        cipher string we set varies with platforms.
+        """
+        opts = sslverify.OpenSSLCertificateOptions(
+            privateKey=self.sKey,
+            certificate=self.sCert,
+        )
+        opts._contextFactory = FakeContext
+        ctx = opts.getContext()
+        self.assertEqual(opts._cipherString, ctx._cipherList)
+
+
+    def test_givesMeaningfulErrorMessageIfNoCipherMatches(self):
+        """
+        If there is no valid cipher that matches the user's wishes,
+        a L{ValueError} is raised.
+        """
+        self.assertRaises(
+            ValueError,
+            sslverify.OpenSSLCertificateOptions,
+            privateKey=self.sKey,
+            certificate=self.sCert,
+            acceptableCiphers=
+            sslverify.OpenSSLAcceptableCiphers.fromOpenSSLCipherString('')
+        )
+
+
+    def test_honorsAcceptableCiphersArgument(self):
+        """
+        If acceptable ciphers are passed, they are used.
+        """
+        @implementer(interfaces.IAcceptableCiphers)
+        class FakeAcceptableCiphers(object):
+            def selectCiphers(self, _):
+                return [sslverify.OpenSSLCipher(u'sentinel')]
+
+        opts = sslverify.OpenSSLCertificateOptions(
+            privateKey=self.sKey,
+            certificate=self.sCert,
+            acceptableCiphers=FakeAcceptableCiphers(),
+        )
+        opts._contextFactory = FakeContext
+        ctx = opts.getContext()
+        self.assertEqual(u'sentinel', ctx._cipherList)
+
+
+    def test_basicSecurityOptionsAreSet(self):
+        """
+        Every context must have C{OP_NO_SSLv2}, C{OP_NO_COMPRESSION}, and
+        C{OP_CIPHER_SERVER_PREFERENCE} set.
+        """
+        opts = sslverify.OpenSSLCertificateOptions(
+            privateKey=self.sKey,
+            certificate=self.sCert,
+        )
+        opts._contextFactory = FakeContext
+        ctx = opts.getContext()
+        options = (SSL.OP_NO_SSLv2 | opts._OP_NO_COMPRESSION |
+                   opts._OP_CIPHER_SERVER_PREFERENCE)
+        self.assertEqual(options, ctx._options & options)
+
+
+    def test_singleUseKeys(self):
+        """
+        If C{singleUseKeys} is set, every context must have
+        C{OP_SINGLE_DH_USE} and C{OP_SINGLE_ECDH_USE} set.
+        """
+        opts = sslverify.OpenSSLCertificateOptions(
+            privateKey=self.sKey,
+            certificate=self.sCert,
+            enableSingleUseKeys=True,
+        )
+        opts._contextFactory = FakeContext
+        ctx = opts.getContext()
+        options = SSL.OP_SINGLE_DH_USE | opts._OP_SINGLE_ECDH_USE
+        self.assertEqual(options, ctx._options & options)
+
+
+    def test_dhParams(self):
+        """
+        If C{dhParams} is set, they are loaded into each new context.
+        """
+        class FakeDiffieHellmanParameters(object):
+            _dhFile = FilePath(b'dh.params')
+
+        dhParams = FakeDiffieHellmanParameters()
+        opts = sslverify.OpenSSLCertificateOptions(
+            privateKey=self.sKey,
+            certificate=self.sCert,
+            dhParameters=dhParams,
+        )
+        opts._contextFactory = FakeContext
+        ctx = opts.getContext()
+        self.assertEqual(
+            FakeDiffieHellmanParameters._dhFile.path,
+            ctx._dhFilename
+        )
 
 
     def test_abbreviatingDistinguishedNames(self):
@@ -663,26 +782,107 @@ class OpenSSLOptions(unittest.TestCase):
                 lambda result: self.assertEqual(result, WritingProtocol.byte))
 
 
-    def test_SSLv2IsDisabledForSSLv23(self):
+
+class ProtocolVersion(Names):
+    """
+    L{ProtocolVersion} provides constants representing each version of the
+    SSL/TLS protocol.
+    """
+    SSLv2 = NamedConstant()
+    SSLv3 = NamedConstant()
+    TLSv1_0 = NamedConstant()
+    TLSv1_1 = NamedConstant()
+    TLSv1_2 = NamedConstant()
+
+
+
+class ProtocolVersionTests(unittest.TestCase):
+    """
+    Tests for L{sslverify.OpenSSLCertificateOptions}'s SSL/TLS version
+    selection features.
+    """
+    if skipSSL:
+        skip = skipSSL
+    else:
+        _METHOD_TO_PROTOCOL = {
+            SSL.SSLv2_METHOD: set([ProtocolVersion.SSLv2]),
+            SSL.SSLv3_METHOD: set([ProtocolVersion.SSLv3]),
+            SSL.TLSv1_METHOD: set([ProtocolVersion.TLSv1_0]),
+            getattr(SSL, "TLSv1_1_METHOD", object()):
+                set([ProtocolVersion.TLSv1_1]),
+            getattr(SSL, "TLSv1_2_METHOD", object()):
+                set([ProtocolVersion.TLSv1_2]),
+
+            # Presently, SSLv23_METHOD means (SSLv2, SSLv3, TLSv1.0, TLSv1.1,
+            # TLSv1.2) (excluding any protocol versions not implemented by the
+            # underlying version of OpenSSL).
+            SSL.SSLv23_METHOD: set(ProtocolVersion.iterconstants()),
+            }
+
+        _EXCLUSION_OPS = {
+            SSL.OP_NO_SSLv2: ProtocolVersion.SSLv2,
+            SSL.OP_NO_SSLv3: ProtocolVersion.SSLv3,
+            SSL.OP_NO_TLSv1: ProtocolVersion.TLSv1_0,
+            getattr(SSL, "OP_NO_TLSv1_1", 0): ProtocolVersion.TLSv1_1,
+            getattr(SSL, "OP_NO_TLSv1_2", 0): ProtocolVersion.TLSv1_2,
+            }
+
+
+    def _protocols(self, opts):
         """
-        SSLv2 is insecure and should be disabled so when users use
-        SSLv23_METHOD, they get at least SSLV3.  It does nothing if
-        SSLv2_METHOD chosen explicitly.
+        Determine which SSL/TLS protocol versions are allowed by C{opts}.
+
+        @param opts: An L{sslverify.OpenSSLCertificateOptions} instance to
+            inspect.
+
+        @return: A L{set} of L{NamedConstant}s from L{ProtocolVersion}
+            indicating which SSL/TLS protocol versions connections negotiated
+            using C{opts} will allow.
         """
-        opts = sslverify.OpenSSLCertificateOptions()
-        ctx = opts.getContext()
-        self.assertEqual(SSL.OP_NO_SSLv2, ctx.set_options(0) & SSL.OP_NO_SSLv2)
+        protocols = self._METHOD_TO_PROTOCOL[opts.method].copy()
+        context = opts.getContext()
+        options = context.set_options(0)
+        if opts.method == SSL.SSLv23_METHOD:
+            # Exclusions apply only to SSLv23_METHOD and no others.
+            for opt, exclude in self._EXCLUSION_OPS.items():
+                if options & opt:
+                    protocols.discard(exclude)
+        return protocols
 
 
+    def test_default(self):
+        """
+        When L{sslverify.OpenSSLCertificateOptions} is initialized with no
+        specific protocol versions all versions of TLS are allowed and no
+        versions of SSL are allowed.
+        """
+        self.assertEqual(
+            set([ProtocolVersion.TLSv1_0,
+                 ProtocolVersion.TLSv1_1,
+                 ProtocolVersion.TLSv1_2]),
+            self._protocols(sslverify.OpenSSLCertificateOptions()))
 
-if interfaces.IReactorSSL(reactor, None) is None:
-    OpenSSLOptions.skip = "Reactor does not support SSL, cannot run SSL tests"
+
+    def test_SSLv23(self):
+        """
+        When L{sslverify.OpenSSLCertificateOptions} is initialized with
+        C{SSLv23_METHOD} all versions of TLS and SSLv3 are allowed.
+        """
+        self.assertEqual(
+            set([ProtocolVersion.SSLv3,
+                 ProtocolVersion.TLSv1_0,
+                 ProtocolVersion.TLSv1_1,
+                 ProtocolVersion.TLSv1_2]),
+            self._protocols(sslverify.OpenSSLCertificateOptions(
+                    method=SSL.SSLv23_METHOD)))
 
 
 
 class _NotSSLTransport:
     def getHandle(self):
         return self
+
+
 
 class _MaybeSSLTransport:
     def getHandle(self):
@@ -693,6 +893,7 @@ class _MaybeSSLTransport:
 
     def get_host_certificate(self):
         return None
+
 
 
 class _ActualSSLTransport:
@@ -706,7 +907,11 @@ class _ActualSSLTransport:
         return sslverify.Certificate.loadPEM(A_PEER_CERTIFICATE_PEM).original
 
 
+
 class Constructors(unittest.TestCase):
+    if skipSSL:
+        skip = skipSSL
+
     def test_peerFromNonSSLTransport(self):
         """
         Verify that peerFromTransport raises an exception if the transport
@@ -716,6 +921,7 @@ class Constructors(unittest.TestCase):
                               sslverify.Certificate.peerFromTransport,
                               _NotSSLTransport())
         self.failUnless(str(x).startswith("non-TLS"))
+
 
     def test_peerFromBlankSSLTransport(self):
         """
@@ -727,6 +933,7 @@ class Constructors(unittest.TestCase):
                               _MaybeSSLTransport())
         self.failUnless(str(x).startswith("TLS"))
 
+
     def test_hostFromNonSSLTransport(self):
         """
         Verify that hostFromTransport raises an exception if the transport
@@ -736,6 +943,7 @@ class Constructors(unittest.TestCase):
                               sslverify.Certificate.hostFromTransport,
                               _NotSSLTransport())
         self.failUnless(str(x).startswith("non-TLS"))
+
 
     def test_hostFromBlankSSLTransport(self):
         """
@@ -758,6 +966,7 @@ class Constructors(unittest.TestCase):
                 _ActualSSLTransport()).serialNumber(),
             12345)
 
+
     def test_peerFromSSLTransport(self):
         """
         Verify that peerFromTransport successfully creates the correct
@@ -770,5 +979,166 @@ class Constructors(unittest.TestCase):
 
 
 
-if interfaces.IReactorSSL(reactor, None) is None:
-    Constructors.skip = "Reactor does not support SSL, cannot run SSL tests"
+class TestOpenSSLCipher(unittest.TestCase):
+    """
+    Tests for twisted.internet._sslverify.OpenSSLCipher.
+    """
+    if skipSSL:
+        skip = skipSSL
+
+    cipherName = u'CIPHER-STRING'
+
+    def test_constructorSetsFullName(self):
+        """
+        The first argument passed to the constructor becomes the full name.
+        """
+        self.assertEqual(
+            self.cipherName,
+            sslverify.OpenSSLCipher(self.cipherName).fullName
+        )
+
+
+    def test_repr(self):
+        """
+        C{repr(cipher)} returns a valid constructor call.
+        """
+        cipher = sslverify.OpenSSLCipher(self.cipherName)
+        self.assertEqual(
+            cipher,
+            eval(repr(cipher), {'OpenSSLCipher': sslverify.OpenSSLCipher})
+        )
+
+
+    def test_eqSameClass(self):
+        """
+        Equal type and C{fullName} means that the objects are equal.
+        """
+        cipher1 = sslverify.OpenSSLCipher(self.cipherName)
+        cipher2 = sslverify.OpenSSLCipher(self.cipherName)
+        self.assertEqual(cipher1, cipher2)
+
+
+    def test_eqSameNameDifferentType(self):
+        """
+        If ciphers have the same name but different types, they're still
+        different.
+        """
+        class DifferentCipher(object):
+            fullName = self.cipherName
+
+        self.assertNotEqual(
+            sslverify.OpenSSLCipher(self.cipherName),
+            DifferentCipher(),
+        )
+
+
+
+class TestExpandCipherString(unittest.TestCase):
+    """
+    Tests for twisted.internet._sslverify._expandCipherString.
+    """
+    if skipSSL:
+        skip = skipSSL
+
+    def test_doesNotStumbleOverEmptyList(self):
+        """
+        If the expanded cipher list is empty, an empty L{list} is returned.
+        """
+        self.assertEqual(
+            [],
+            sslverify._expandCipherString(u'', SSL.SSLv23_METHOD, 0)
+        )
+
+
+    def test_doesNotSwallowOtherSSLErrors(self):
+        """
+        Only no cipher matches get swallowed, every other SSL error gets
+        propagated.
+        """
+        def raiser(_):
+            # Unfortunately, there seems to be no way to trigger a real SSL
+            # error artificially.
+            raise SSL.Error([['', '', '']])
+        ctx = FakeContext(SSL.SSLv23_METHOD)
+        ctx.set_cipher_list = raiser
+        self.patch(sslverify.SSL, 'Context', lambda _: ctx)
+        self.assertRaises(
+            SSL.Error,
+            sslverify._expandCipherString, u'ALL', SSL.SSLv23_METHOD, 0
+        )
+
+
+    def test_returnsListOfICiphers(self):
+        """
+        L{sslverify._expandCipherString} always returns a L{list} of
+        L{interfaces.ICipher}.
+        """
+        ciphers = sslverify._expandCipherString(u'ALL', SSL.SSLv23_METHOD, 0)
+        self.assertIsInstance(ciphers, list)
+        bogus = []
+        for c in ciphers:
+            if not interfaces.ICipher.providedBy(c):
+                bogus.append(c)
+
+        self.assertEqual([], bogus)
+
+
+
+class TestAcceptableCiphers(unittest.TestCase):
+    """
+    Tests for twisted.internet._sslverify.OpenSSLAcceptableCiphers.
+    """
+    if skipSSL:
+        skip = skipSSL
+
+    def test_selectOnEmptyListReturnsEmptyList(self):
+        """
+        If no ciphers are available, nothing can be selected.
+        """
+        ac = sslverify.OpenSSLAcceptableCiphers([])
+        self.assertEqual([], ac.selectCiphers([]))
+
+
+    def test_selectReturnsOnlyFromAvailable(self):
+        """
+        Select only returns a cross section of what is available and what is
+        desirable.
+        """
+        ac = sslverify.OpenSSLAcceptableCiphers([
+            sslverify.OpenSSLCipher('A'),
+            sslverify.OpenSSLCipher('B'),
+        ])
+        self.assertEqual([sslverify.OpenSSLCipher('B')],
+                         ac.selectCiphers([sslverify.OpenSSLCipher('B'),
+                                           sslverify.OpenSSLCipher('C')]))
+
+
+    def test_fromOpenSSLCipherStringExpandsToListOfCiphers(self):
+        """
+        If L{sslverify.OpenSSLAcceptableCiphers.fromOpenSSLCipherString} is
+        called it expands the string to a list of ciphers.
+        """
+        ac = sslverify.OpenSSLAcceptableCiphers.fromOpenSSLCipherString('ALL')
+        self.assertIsInstance(ac._ciphers, list)
+        self.assertTrue(all(sslverify.ICipher.providedBy(c)
+                            for c in ac._ciphers))
+
+
+
+class TestDiffieHellmanParameters(unittest.TestCase):
+    """
+    Tests for twisted.internet._sslverify.OpenSSLDHParameters.
+    """
+    if skipSSL:
+        skip = skipSSL
+    filePath = FilePath(b'dh.params')
+
+    def test_fromFile(self):
+        """
+        Calling C{fromFile} with a filename returns an instance with that file
+        name saved.
+        """
+        params = sslverify.OpenSSLDiffieHellmanParameters.fromFile(
+            self.filePath
+        )
+        self.assertEqual(self.filePath, params._dhFile)
