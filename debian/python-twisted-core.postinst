@@ -7,7 +7,7 @@ set -e
 rebuild_cache()
 {
     # remove all cache files, then rebuild for the installed python versions
-    rm -f /usr/lib/python2.?/*-packages/twisted/plugins/dropin.cache
+    rm -f /usr/lib/python[23].?/*-packages/twisted/plugins/dropin.cache
     for p in $(pyversions -i); do
 	$p -c 'from twisted.plugin import IPlugin, getPlugins; list(getPlugins(IPlugin))' \
 	  >/dev/null 2>&1 || true

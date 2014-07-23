@@ -1,12 +1,14 @@
-twisted (13.2.0-1ubuntu1) trusty; urgency=medium
+twisted (14.0.0-2) unstable; urgency=medium
 
-  * Merge with Debian; remaining changes:
-    - Keep the preliminary python3 support, but don't enable it.
-    - Try to use plain pygtkcompat and fall back to gi.pygtkcompat, to
-      avoid a DeprecationWarning, and a crash.
-    - Use new io_add_watch api on new versions of pygobject.
+  * python-twisted-core: Depend on python-openssl and python-service-identity.
 
- -- Matthias Klose <doko@ubuntu.com>  Wed, 08 Jan 2014 00:19:41 +0100
+ -- Matthias Klose <doko@debian.org>  Wed, 23 Jul 2014 15:39:02 +0200
+
+twisted (14.0.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Matthias Klose <doko@debian.org>  Mon, 14 Jul 2014 13:49:08 +0200
 
 twisted (13.2.0-1) unstable; urgency=medium
 
@@ -21,63 +23,11 @@ twisted (13.1.0-1) unstable; urgency=low
 
  -- Free Ekanayaka <freee@debian.org>  Fri, 04 Oct 2013 14:20:11 +0200
 
-twisted (13.0.0-1ubuntu1) saucy; urgency=low
-
-  * Merge with Debian; remaining changes:
-    - Keep the preliminary python3 support, but don't enable it.
-    - Try to use plain pygtkcompat and fall back to gi.pygtkcompat, to
-      avoid a DeprecationWarning, and a crash.
-    - Use new io_add_watch api on new versions of pygobject.
-    - Point html documentation to the generated api docs.
-
- -- Matthias Klose <doko@ubuntu.com>  Thu, 20 Jun 2013 13:30:20 +0200
-
 twisted (13.0.0-1) unstable; urgency=low
 
   * New upstream release
 
  -- Free Ekanayaka <freee@debian.org>  Wed, 05 Jun 2013 20:48:54 +0200
-
-twisted (12.3.0-1ubuntu6) raring; urgency=low
-
-  * Stop building the python3 packages (will be built from a separate
-    source until the python3 support is complete).
-
- -- Matthias Klose <doko@ubuntu.com>  Thu, 04 Apr 2013 10:14:52 +0200
-
-twisted (12.3.0-1ubuntu5) raring; urgency=low
-
-  * debian/patches/lp1098127.diff:
-    - Use new io_add_watch api on new versions of pygobject. (LP: #1098127)
-
- -- Rodney Dawes <rodney.dawes@ubuntu.com>  Thu, 14 Mar 2013 17:24:59 -0400
-
-twisted (12.3.0-1ubuntu4) raring; urgency=low
-
-  * debian/patches/lp1102685.diff:
-    - Try to use plain pygtkcompat and fall back to gi.pygtkcompat, to
-      avoid a DeprecationWarning, and a crash. (LP: #1102685)
-
- -- Rodney Dawes <rodney.dawes@ubuntu.com>  Wed, 23 Jan 2013 12:19:06 -0500
-
-twisted (12.3.0-1ubuntu3) raring; urgency=low
-
-  * Explicitly call 2to3 to build the py3k source.
-
- -- Matthias Klose <doko@debian.org>  Wed, 23 Jan 2013 11:41:25 +0100
-
-twisted (12.3.0-1ubuntu2) raring; urgency=low
-
-  * Port Py_InitModule* calls to PyModule_Create for python3.
-
- -- Adam Conrad <adconrad@ubuntu.com>  Mon, 21 Jan 2013 13:43:44 -0700
-
-twisted (12.3.0-1ubuntu1) raring; urgency=low
-
-  * Build python3 packages.
-  * Add '3' as the suffix for the binaries using python3.
-
- -- Matthias Klose <doko@ubuntu.com>  Wed, 16 Jan 2013 17:44:26 +0100
 
 twisted (12.3.0-1) experimental; urgency=low
 
