@@ -1,6 +1,7 @@
 twisted (14.0.0-2pexip1) pexip; urgency=low
 
   * New upstream release. Debian is now upstream.
+  * debian/rules: back out hackery for SVN snapshot.
 
  -- John-Mark Bell <jmb@pexip.com>  Wed, 20 Aug 2014 21:31:25 +0100
 
