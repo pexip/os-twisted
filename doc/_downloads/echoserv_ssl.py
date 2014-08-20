@@ -2,25 +2,22 @@
 # Copyright (c) Twisted Matrix Laboratories.
 # See LICENSE for details.
 
-if __name__ == '__main__':
-    import echoserv_ssl
-    raise SystemExit(echoserv_ssl.main())
-
 import sys
 
-from twisted.internet import reactor
-from twisted.internet.protocol import Factory
-from twisted.internet import ssl, reactor
+from twisted.internet import ssl, protocol, task, defer
 from twisted.python import log
+from twisted.python.modules import getModule
 
 import echoserv
 
-def main():
-    with open('server.pem') as keyAndCert:
-        cert = ssl.PrivateCertificate.loadPEM(keyAndCert.read())
-
+def main(reactor):
     log.startLogging(sys.stdout)
-    factory = Factory()
-    factory.protocol = echoserv.Echo
-    reactor.listenSSL(8000, factory, cert.options())
-    reactor.run()
+    certData = getModule(__name__).filePath.sibling('server.pem').getContent()
+    certificate = ssl.PrivateCertificate.loadPEM(certData)
+    factory = protocol.Factory.forProtocol(echoserv.Echo)
+    reactor.listenSSL(8000, factory, certificate.options())
+    return defer.Deferred()
+
+if __name__ == '__main__':
+    import echoserv_ssl
+    task.react(echoserv_ssl.main)
