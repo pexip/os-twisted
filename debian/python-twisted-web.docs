@@ -1,4 +1,2 @@
-twisted/web/topfiles/NEWS
-twisted/web/topfiles/README
-doc/web/examples/
-doc/web/howto/
+docs/web/examples/
+docs/web/howto/

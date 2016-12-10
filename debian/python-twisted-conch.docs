@@ -1,4 +1,2 @@
-twisted/conch/topfiles/NEWS
-twisted/conch/topfiles/README
-doc/conch/examples/
-doc/conch/howto/
+docs/conch/examples/
+docs/conch/howto/
