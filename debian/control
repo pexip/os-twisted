@@ -2,9 +2,8 @@ Source: twisted
 Section: python
 Priority: optional
 Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
-Uploaders: Matthias Klose <doko@debian.org>,
-           Free Ekanayaka <freee@debian.org>
-Build-Depends: debhelper (>=7.0.50~),
+Uploaders: Matthias Klose <doko@debian.org>
+Build-Depends: debhelper (>= 9),
                dh-python,
                patch,
                python-all-dev,
@@ -13,6 +12,8 @@ Build-Depends: debhelper (>=7.0.50~),
                python-setuptools,
                python-incremental,
                python-constantly,
+               python-automat (>= 0.6.0),
+               python-hyperlink,
                python-doc,
                python3-all-dev,
                python3-all-dbg,
@@ -20,30 +21,35 @@ Build-Depends: debhelper (>=7.0.50~),
                python3-setuptools,
                python3-incremental,
                python3-constantly,
+               python3-automat (>= 0.6.0),
+               python3-hyperlink,
                python3-doc
 Build-Depends-Indep: python3-sphinx
-Standards-Version: 3.9.8
-Homepage: https://github.com/waylan/Python-Markdown
-Vcs-Browser: https://anonscm.debian.org/cgit/python-modules/packages/twisted.git
-Vcs-Git: https://anonscm.debian.org/git/python-modules/packages/twisted.git
+Standards-Version: 4.1.5
+Homepage: https://twistedmatrix.com/
+Vcs-Browser: https://salsa.debian.org/python-team/modules/twisted
+Vcs-Git: https://salsa.debian.org/python-team/modules/twisted.git
 
 Package: python3-twisted
 Architecture: all
 Depends: ${python3:Depends},
          python3-twisted-bin (>= ${source:Version}),
          python3-zope.interface (>= 4.0.2),
+         python3-automat (>= 0.6.0),
+         python3-attr (>= 17.1.0),
          ${misc:Depends},
          python3-openssl, python3-service-identity
 Suggests: python3-tk,
           python3-gtk2,
           python3-glade2,
+          python3-pampy,
           python3-qt4,
+          python3-serial,
           python3-wxgtk2.8
-Recommends: python3-pam,
-            python3-serial
 Provides: ${python:Provides}
 Conflicts: python3-twisted-experimental
 Replaces: python3-twisted-experimental
+Breaks: python3-h2 (<< 3.0.0)
 Description: Event-based framework for internet applications
  It includes a web server, a telnet server, a multiplayer RPG engine, a
  generic client and server for remote object access, and APIs for creating
@@ -58,12 +64,11 @@ Depends: ${python3:Depends},
 Provides: ${python:Provides}
 Suggests: python3-twisted-bin-dbg
 Description: Event-based framework for internet applications
- It includes a web server, a telnet server, a multiplayer RPG engine, a 
- generic client and server for remote object access, and APIs for creating 
+ It includes a web server, a telnet server, a multiplayer RPG engine, a
+ generic client and server for remote object access, and APIs for creating
  new protocols.
 
 Package: python3-twisted-bin-dbg
-Priority: extra
 Section: debug
 Architecture: any
 Multi-Arch: same
@@ -72,8 +77,8 @@ Depends: python3-zope.interface-dbg,
          python3-dbg, ${shlibs:Depends},
          ${misc:Depends}
 Description: Event-based framework for internet applications (debug extension)
- It includes a web server, a telnet server, a multiplayer RPG engine, a 
- generic client and server for remote object access, and APIs for creating 
+ It includes a web server, a telnet server, a multiplayer RPG engine, a
+ generic client and server for remote object access, and APIs for creating
  new protocols.
  .
  This package contains the extension built for the Python debug interpreter.
@@ -88,12 +93,11 @@ Provides: ${python:Provides}
 Suggests: python-twisted-bin-dbg
 Replaces: python-twisted-runner (<< 15.5.0-3),
 Description: Event-based framework for internet applications
- It includes a web server, a telnet server, a multiplayer RPG engine, a 
- generic client and server for remote object access, and APIs for creating 
+ It includes a web server, a telnet server, a multiplayer RPG engine, a
+ generic client and server for remote object access, and APIs for creating
  new protocols.
 
 Package: python-twisted-bin-dbg
-Priority: extra
 Section: debug
 Architecture: any
 Multi-Arch: same
@@ -103,8 +107,8 @@ Depends: python-twisted-bin (= ${binary:Version}),
          ${misc:Depends}
 Replaces: python-twisted-runner-dbg (<< 15.5.0-3),
 Description: Event-based framework for internet applications (debug extension)
- It includes a web server, a telnet server, a multiplayer RPG engine, a 
- generic client and server for remote object access, and APIs for creating 
+ It includes a web server, a telnet server, a multiplayer RPG engine, a
+ generic client and server for remote object access, and APIs for creating
  new protocols.
  .
  This package contains the extension built for the Python debug interpreter.
@@ -114,6 +118,8 @@ Architecture: all
 Multi-Arch: foreign
 Depends: python-twisted-bin (>= ${source:Version}),
          python-zope.interface (>= 4.0.2),
+         python-automat (>= 0.6.0),
+         python-attr (>= 17.1.0),
          ${python:Depends},
          ${misc:Depends},
          python-openssl,
@@ -121,10 +127,10 @@ Depends: python-twisted-bin (>= ${source:Version}),
 Suggests: python-tk,
           python-gtk2,
           python-glade2,
+          python-pampy,
           python-qt3,
+          python-serial,
           python-wxgtk3.0
-Recommends: python-pam,
-            python-serial
 Provides: ${python:Provides}
 Replaces: python-twisted-conch (<< 1:15.5.0-3),
           python-twisted-mail (<< 15.5.0-3),
@@ -142,6 +148,7 @@ Breaks: python-twisted-conch (<< 1:15.5.0-3),
         python-twisted-words (<< 15.5.0-3),
         torbrowser-launcher (<= 0.2.0-1~),
         python-scrapy (<< 1.0.0-1~),
+        python-h2 (<< 3.0.0),
         txsocksx (<< 1.13.0.4-1~)
 Description: Event-based framework for internet applications
  It includes a web server, a telnet server, a multiplayer RPG engine, a
@@ -173,7 +180,7 @@ Description: Event-based framework for internet applications
 
 Package: python-twisted-conch
 Architecture: all
-Depends: python-twisted-core (>= ${source:Version}), 
+Depends: python-twisted-core (>= ${source:Version}),
          python-crypto (>= 2.0.1+dfsg1-1.1),
          python-pyasn1,
          ${python:Depends},
@@ -234,11 +241,10 @@ Description: twisted dummy package for process management
 
 Package: python-twisted-runner-dbg
 Section: debug
-Priority: extra
 Architecture: all
 Multi-Arch: foreign
 Depends: python-twisted-runner (= ${binary:Version}),
-         python-dbg,
+         python-dbg:any,
          ${shlibs:Depends},
          ${misc:Depends}
 Description: twisted dummy package for process management
@@ -270,7 +276,6 @@ Description: twisted dummy package for Chat and Instant Messaging
 
 Package: twisted-doc
 Section: doc
-Priority: extra
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends},
@@ -281,13 +286,12 @@ Description: Official documentation of Twisted
  This contains various HOWTOs and overviews in various formats
  .
  Twisted is an event-based framework for internet applications.
- It includes a web server, a telnet server, a multiplayer RPG engine, a 
- generic client and server for remote object access, and APIs for creating 
+ It includes a web server, a telnet server, a multiplayer RPG engine, a
+ generic client and server for remote object access, and APIs for creating
  new protocols.
 
 Package: python-twisted
 Architecture: all
-Priority: extra
 Depends: python-twisted-core (>= ${source:Version}),
          ${python:Depends},
          ${misc:Depends}
