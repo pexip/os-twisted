@@ -9,7 +9,7 @@ Build-Depends: debhelper (>=7.0.50~),
   python-zope.interface-dbg, patch
 XS-Python-Version: all
 Standards-Version: 3.9.2
-XS-Pexip-Upstream: http://ftp.debian.org/debian/ jessie
+XS-Pexip-Upstream: http://ftp.debian.org/debian/ stretch
 
 Package: python-twisted-bin
 Architecture: any
