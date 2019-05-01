@@ -1,1 +1,9 @@
-tap2deb.diff
+0001-wxpython3.0.patch
+0002-combinedlog.patch
+0003-sphinx-theme.patch
+0004-localIntersphinx.patch
+0005-insecure-pythonpath.patch
+0006-fix-sphinx-import-path.patch
+0007-openssl-1.1.0.patch
+0008-sort-option-keys.patch
+0009-no-stderr-in-test_ckeygen.patch
