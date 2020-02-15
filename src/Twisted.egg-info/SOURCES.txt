@@ -3,7 +3,7 @@ CONTRIBUTING
 INSTALL.rst
 LICENSE
 MANIFEST.in
-NEWS
+NEWS.rst
 README.rst
 code_of_conduct.md
 setup.py
@@ -94,11 +94,9 @@ docs/core/examples/echoserv_udp.py
 docs/core/examples/filewatch.py
 docs/core/examples/ftpclient.py
 docs/core/examples/ftpserver.py
-docs/core/examples/gpsfix.py
 docs/core/examples/index.rst
 docs/core/examples/longex.py
 docs/core/examples/longex2.py
-docs/core/examples/mouse.py
 docs/core/examples/pb_exceptions.py
 docs/core/examples/pbbenchclient.py
 docs/core/examples/pbbenchserver.py
@@ -360,6 +358,7 @@ docs/core/specifications/index.rst
 docs/fun/Twisted.Quotes
 docs/fun/lightbulb
 docs/fun/register.html
+docs/historic/NEWS.rst
 docs/historic/index.rst
 docs/historic/ipc10errata.html
 docs/historic/ipc10paper.html
@@ -401,6 +400,9 @@ docs/historic/Quotes/Twisted-16.3
 docs/historic/Quotes/Twisted-16.4
 docs/historic/Quotes/Twisted-16.5
 docs/historic/Quotes/Twisted-16.6
+docs/historic/Quotes/Twisted-17.1
+docs/historic/Quotes/Twisted-17.5
+docs/historic/Quotes/Twisted-17.9
 docs/historic/Quotes/Twisted-2.0
 docs/historic/Quotes/Twisted-2.1
 docs/historic/Quotes/Twisted-2.2
@@ -529,6 +531,7 @@ docs/web/howto/listings/webquote.rtl
 docs/web/howto/listings/xmlAndSoapQuote.py
 docs/web/howto/listings/xmlquote.rpy
 docs/web/howto/listings/xmlrpc-customized.py
+docs/web/howto/listings/client/bytesprod.py
 docs/web/howto/listings/client/cookies.py
 docs/web/howto/listings/client/endpointconstructor.py
 docs/web/howto/listings/client/filesendbody.py
@@ -537,7 +540,6 @@ docs/web/howto/listings/client/request.py
 docs/web/howto/listings/client/response.py
 docs/web/howto/listings/client/responseBody.py
 docs/web/howto/listings/client/sendbody.py
-docs/web/howto/listings/client/stringprod.py
 docs/web/howto/web-in-60/access-logging.rst
 docs/web/howto/web-in-60/asynchronous-deferred.rst
 docs/web/howto/web-in-60/asynchronous.rst
@@ -575,7 +577,6 @@ docs/words/examples/cursesclient.py
 docs/words/examples/index.rst
 docs/words/examples/ircLogBot.py
 docs/words/examples/minchat.py
-docs/words/examples/oscardemo.py
 docs/words/examples/pb_client.py
 docs/words/examples/xmpp_client.py
 docs/words/howto/im.rst
@@ -614,9 +615,11 @@ src/twisted/application/service.py
 src/twisted/application/strports.py
 src/twisted/application/runner/__init__.py
 src/twisted/application/runner/_exit.py
+src/twisted/application/runner/_pidfile.py
 src/twisted/application/runner/_runner.py
 src/twisted/application/runner/test/__init__.py
 src/twisted/application/runner/test/test_exit.py
+src/twisted/application/runner/test/test_pidfile.py
 src/twisted/application/runner/test/test_runner.py
 src/twisted/application/test/__init__.py
 src/twisted/application/test/test_internet.py
@@ -667,7 +670,6 @@ src/twisted/conch/scripts/ckeygen.py
 src/twisted/conch/scripts/conch.py
 src/twisted/conch/scripts/tkconch.py
 src/twisted/conch/ssh/__init__.py
-src/twisted/conch/ssh/_cryptography_backports.py
 src/twisted/conch/ssh/_kex.py
 src/twisted/conch/ssh/address.py
 src/twisted/conch/ssh/agent.py
@@ -739,10 +741,13 @@ src/twisted/internet/__init__.py
 src/twisted/internet/_baseprocess.py
 src/twisted/internet/_dumbwin32proc.py
 src/twisted/internet/_glibbase.py
+src/twisted/internet/_idna.py
 src/twisted/internet/_newtls.py
 src/twisted/internet/_pollingfile.py
 src/twisted/internet/_posixserialport.py
 src/twisted/internet/_posixstdio.py
+src/twisted/internet/_producer_helpers.py
+src/twisted/internet/_resolver.py
 src/twisted/internet/_signals.py
 src/twisted/internet/_sslverify.py
 src/twisted/internet/_threadedselect.py
@@ -820,6 +825,7 @@ src/twisted/internet/test/process_helper.py
 src/twisted/internet/test/reactormixins.py
 src/twisted/internet/test/test_abstract.py
 src/twisted/internet/test/test_address.py
+src/twisted/internet/test/test_asyncioreactor.py
 src/twisted/internet/test/test_base.py
 src/twisted/internet/test/test_baseprocess.py
 src/twisted/internet/test/test_core.py
@@ -842,6 +848,7 @@ src/twisted/internet/test/test_posixbase.py
 src/twisted/internet/test/test_posixprocess.py
 src/twisted/internet/test/test_process.py
 src/twisted/internet/test/test_protocol.py
+src/twisted/internet/test/test_resolver.py
 src/twisted/internet/test/test_serialport.py
 src/twisted/internet/test/test_sigchld.py
 src/twisted/internet/test/test_socket.py
@@ -854,6 +861,7 @@ src/twisted/internet/test/test_udp.py
 src/twisted/internet/test/test_udp_internals.py
 src/twisted/internet/test/test_unix.py
 src/twisted/internet/test/test_win32events.py
+src/twisted/internet/test/test_win32serialport.py
 src/twisted/internet/test/fake_CAs/chain.pem
 src/twisted/internet/test/fake_CAs/not-a-certificate
 src/twisted/internet/test/fake_CAs/thing1.pem
@@ -911,7 +919,6 @@ src/twisted/mail/scripts/mailmail.py
 src/twisted/mail/test/__init__.py
 src/twisted/mail/test/pop3testserver.py
 src/twisted/mail/test/rfc822.message
-src/twisted/mail/test/server.pem
 src/twisted/mail/test/test_bounce.py
 src/twisted/mail/test/test_imap.py
 src/twisted/mail/test/test_mail.py
@@ -1028,7 +1035,6 @@ src/twisted/protocols/shoutcast.py
 src/twisted/protocols/sip.py
 src/twisted/protocols/socks.py
 src/twisted/protocols/stateful.py
-src/twisted/protocols/telnet.py
 src/twisted/protocols/tls.py
 src/twisted/protocols/wire.py
 src/twisted/protocols/haproxy/__init__.py
@@ -1105,6 +1111,7 @@ src/twisted/python/_pydoctortemplates/common.html
 src/twisted/python/_pydoctortemplates/index.html
 src/twisted/python/_pydoctortemplates/summary.html
 src/twisted/python/test/__init__.py
+src/twisted/python/test/_deprecatetests.py.3only
 src/twisted/python/test/cmodulepullpipe.py
 src/twisted/python/test/deprecatedattributes.py
 src/twisted/python/test/modules_helpers.py
@@ -1138,12 +1145,10 @@ src/twisted/runner/__init__.py
 src/twisted/runner/inetd.py
 src/twisted/runner/inetdconf.py
 src/twisted/runner/inetdtap.py
-src/twisted/runner/portmap.c
 src/twisted/runner/procmon.py
 src/twisted/runner/procmontap.py
 src/twisted/runner/test/__init__.py
 src/twisted/runner/test/test_inetdconf.py
-src/twisted/runner/test/test_inetdtap.py
 src/twisted/runner/test/test_procmon.py
 src/twisted/runner/test/test_procmontap.py
 src/twisted/scripts/__init__.py
@@ -1172,8 +1177,10 @@ src/twisted/tap/ftp.py
 src/twisted/tap/portforward.py
 src/twisted/tap/socks.py
 src/twisted/test/__init__.py
+src/twisted/test/cert.pem.no_trailing_newline
 src/twisted/test/crash_test_dummy.py
 src/twisted/test/iosim.py
+src/twisted/test/key.pem.no_trailing_newline
 src/twisted/test/mock_win32process.py
 src/twisted/test/myrebuilder1.py
 src/twisted/test/myrebuilder2.py
@@ -1382,6 +1389,7 @@ src/twisted/web/test/_util.py
 src/twisted/web/test/requesthelper.py
 src/twisted/web/test/test_agent.py
 src/twisted/web/test/test_cgi.py
+src/twisted/web/test/test_client.py
 src/twisted/web/test/test_distrib.py
 src/twisted/web/test/test_domhelpers.py
 src/twisted/web/test/test_error.py
@@ -1425,7 +1433,6 @@ src/twisted/words/im/locals.py
 src/twisted/words/im/pbsupport.py
 src/twisted/words/protocols/__init__.py
 src/twisted/words/protocols/irc.py
-src/twisted/words/protocols/oscar.py
 src/twisted/words/protocols/jabber/__init__.py
 src/twisted/words/protocols/jabber/client.py
 src/twisted/words/protocols/jabber/component.py
@@ -1453,7 +1460,6 @@ src/twisted/words/test/test_jabbersasl.py
 src/twisted/words/test/test_jabbersaslmechanisms.py
 src/twisted/words/test/test_jabberxmlstream.py
 src/twisted/words/test/test_jabberxmppstringprep.py
-src/twisted/words/test/test_oscar.py
 src/twisted/words/test/test_service.py
 src/twisted/words/test/test_tap.py
 src/twisted/words/test/test_xishutil.py
