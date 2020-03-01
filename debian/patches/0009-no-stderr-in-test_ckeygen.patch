@@ -10,7 +10,7 @@ https://twistedmatrix.com/trac/ticket/8924
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/twisted/conch/test/test_ckeygen.py b/src/twisted/conch/test/test_ckeygen.py
-index 49c1eca..a5727bd 100644
+index a840085..41a0208 100644
 --- a/src/twisted/conch/test/test_ckeygen.py
 +++ b/src/twisted/conch/test/test_ckeygen.py
 @@ -7,6 +7,7 @@ Tests for L{twisted.conch.scripts.ckeygen}.

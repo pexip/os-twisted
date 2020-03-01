@@ -2,4 +2,4 @@
 
 chown nobody $AUTOPKGTEST_TMP
 cd $AUTOPKGTEST_TMP
-echo python -m twisted.trial twisted | su -s /bin/sh nobody
+echo python -m twisted.trial --reporter=summary -e twisted | su -s /bin/sh nobody

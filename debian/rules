@@ -77,8 +77,7 @@ install-python%: install-prereq
 	dh_movefiles -ppython-twisted-bin \
 	  --sourcedir=debian/python-twisted-core \
 	    $(call py_libdir,$*)/twisted/python/_sendmsg.so \
-	    $(call py_libdir,$*)/twisted/test/raiser.so \
-	    $(call py_libdir,$*)/twisted/runner/portmap.so
+	    $(call py_libdir,$*)/twisted/test/raiser.so
 
 	: # python-twisted-bin-dbg
 	python$*-dbg setup.py install --root=debian/python-twisted-bin-dbg --no-compile --install-layout=deb
@@ -194,8 +193,10 @@ endif
 	dh_compress -i -X.py
 	dh_fixperms -i
 	dh_lintian -i
-	dh_python2 -i
-	dh_python3 -i
+	dh_python2 -i -X hamcrest
+	dh_python3 -i -X hamcrest
+	# post-process .substvars until #806316 is fixed and -X starts working
+	sed -i 's/ python3*-hamcrest,//' debian/python-twisted-core.substvars debian/python3-twisted.substvars
 	dh_installdeb -i
 	dh_gencontrol -ppython-twisted-core -ppython-twisted-mail \
 	    -ppython-twisted-names -ppython-twisted-news -ppython-twisted-web \

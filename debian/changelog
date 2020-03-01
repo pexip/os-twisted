@@ -1,3 +1,131 @@
+twisted (18.9.0-3) unstable; urgency=medium
+
+  * Don't fix package substvars in binary-arch:, they did not depend on hamcrest
+
+ -- Balint Reczey <rbalint@ubuntu.com>  Fri, 07 Dec 2018 11:23:30 +0100
+
+twisted (18.9.0-2) unstable; urgency=medium
+
+  * Don't generate dependency on python{,3}-hamcrest, it is just a test dependency
+  * Demote Python serial and pam modules from Recommends: to Suggests:
+    (Closes: #599665)
+
+ -- Balint Reczey <rbalint@ubuntu.com>  Thu, 06 Dec 2018 14:52:10 +0100
+
+twisted (18.9.0-1) unstable; urgency=medium
+
+  * New upstream version 18.9.0
+  * Rebase patches
+  * Update patches against tests
+
+ -- Balint Reczey <rbalint@ubuntu.com>  Wed, 05 Dec 2018 17:18:59 +0100
+
+twisted (18.7.0-3) unstable; urgency=medium
+
+  * Team upload.
+
+  [ nyov ]
+  * Update requirement for attr version.  Closes: #910056
+
+  [ Mattia Rizzolo ]
+  * Annotate python-dbg dependency with :any (from the m-a hinter).
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 02 Oct 2018 16:40:06 +0200
+
+twisted (18.7.0-2) unstable; urgency=medium
+
+  * python{,3}-hamcrest is only a test dependency, not a runtime dependency.
+
+ -- Matthias Klose <doko@debian.org>  Tue, 14 Aug 2018 21:15:10 +0200
+
+twisted (18.7.0-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Remove patches applied upstream.
+  * Stop applying the fix for #772629, upstream ticket #7730.
+
+ -- Matthias Klose <doko@debian.org>  Tue, 14 Aug 2018 14:46:11 +0200
+
+twisted (18.4.0-3) unstable; urgency=medium
+
+  * Team upload.
+  * Declare Breaks against h2 before 3.0.0
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 13 Aug 2018 15:44:16 +0200
+
+twisted (18.4.0-2) unstable; urgency=medium
+
+   * Fixup async issues and compatibility with Python 3.7 (Gianfranco
+     Costamagna). Closes: #902766.
+   * Drop the first chunk of the 0011-fix-broken-sslverify-tests patch,
+     works on Debian only.
+
+ -- Matthias Klose <doko@debian.org>  Tue, 03 Jul 2018 05:50:32 +0200
+
+twisted (18.4.0-1) unstable; urgency=medium
+
+  * New upstream version 18.4.0
+  * Add .travis.yml for CI on Travis (will need to be moved to Salsa)
+  * Remove myself from Uploaders
+
+ -- Free Ekanayaka <freee@debian.org>  Sun, 06 May 2018 09:19:29 +0000
+
+twisted (17.9.0-2) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Ondřej Nový ]
+  * d/control: Set Vcs-* to salsa.debian.org
+  * d/control: Deprecating priority extra as per policy 4.0.1
+    (closes: #687218)
+  * d/watch: Use https protocol
+  * d/changelog: Remove trailing whitespaces
+  * d/control: Remove trailing whitespaces
+
+  [ Colin Watson ]
+  * Fix conch MSG_DEBUG parsing on Python 2 (closes: #895374).
+  * Fix incorrect Homepage field (closes: #866642).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 20 Apr 2018 23:55:26 +0100
+
+twisted (17.9.0-1) unstable; urgency=medium
+
+  * New upstream release 17.9.0.
+  * Explicitly depend on python-automat/python3-automat (>= 0.6.0).
+
+ -- Matthias Klose <doko@debian.org>  Tue, 26 Sep 2017 23:25:12 +0200
+
+twisted (17.9.0~rc1-1) unstable; urgency=medium
+
+  * New upstream release candidate 17.9.0.
+  * Bump debhelper and standards version.
+
+ -- Matthias Klose <doko@debian.org>  Tue, 19 Sep 2017 16:42:41 +0200
+
+twisted (17.5.0-2) unstable; urgency=medium
+
+  * Make autopkgtest depend on setuptools
+
+ -- Free Ekanayaka <freee@debian.org>  Mon, 04 Sep 2017 08:41:29 +0000
+
+twisted (17.5.0-1) unstable; urgency=medium
+
+  * New upstream version 17.5.0
+  * Drop unused patches
+  * Refresh 0002-combinedlog.patch
+  * Add new build-dependency on Python hyperlink
+  * Drop deprecated portmap.so (see upstream's #8464)
+  * Bump build dependency on Python automat (>= 0.6.0)
+  * Add patches for failing tests
+
+ -- Free Ekanayaka <freee@debian.org>  Sun, 27 Aug 2017 09:24:58 +0000
+
+twisted (17.1.0-1) experimental; urgency=medium
+
+  * New upstream version 17.1.0
+
+ -- Free Ekanayaka <freee@debian.org>  Fri, 17 Feb 2017 10:31:45 +0000
+
 twisted (16.6.0-2pexip1) pexip; urgency=low
 
   * New upstream release.
@@ -417,7 +545,7 @@ twisted (8.1.0-4) unstable; urgency=low
   * Move the cache update from python-twisted into python-twisted-core.
     Closes: #500942.
 
-    Plugins should update the cache on package install (postinst) and 
+    Plugins should update the cache on package install (postinst) and
     removal (postrm remove) by updating the cache. See the postinst
     script of python-twisted-core how to update the cache.
 
@@ -426,7 +554,7 @@ twisted (8.1.0-4) unstable; urgency=low
   * Don't install twisted/test/generator_failure_tests.py, syntax errors
     with python2.4. Closes: #492830.
   * Fix manhole to work with python-gtk2 (>= 2.10). Closes: #469105.
-  * mktap(1) description of options fixed in an earlier version. 
+  * mktap(1) description of options fixed in an earlier version.
     Closes: #278194.
   * mktap news fixed in an earlier version. Closes: #278196.
   * Fix build failure on GNU/kFreeBSD (Petr Salinger). Closes: #490770.
@@ -717,11 +845,11 @@ twisted (1.0.6-1) unstable; urgency=low
   * NMU (encouraged by maintainer)
 
  -- Martin Sjogren <sjogren@debian.org>  Thu,  3 Jul 2003 07:45:27 +0200
- 
+
 twisted (1.0.5-1) unstable; urgency=low
 
   * New upstream version
-  * Remove Python 2.1 packages -- upstream no longer supports 2.1 
+  * Remove Python 2.1 packages -- upstream no longer supports 2.1
 
  -- Moshe Zadka <moshez@debian.org>  Thu,  1 May 2003 09:06:49 +0300
 
@@ -741,25 +869,25 @@ twisted (1.0.3-1) unstable; urgency=low
     * doc-base support
   * Split out doc-api
     * It's HUGE and many people don't need it (since it is available on the
-      web) 
+      web)
 
  -- Moshe Zadka <moshez@debian.org>  Tue, 12 Nov 2002 02:59:56 -0600
 
 twisted (1.0.0-2) unstable; urgency=low
 
-  * Put api docs in api/ (Closes: #167196) 
+  * Put api docs in api/ (Closes: #167196)
 
  -- Moshe Zadka <moshez@debian.org>  Thu,  7 Nov 2002 12:27:37 -0600
 
 twisted (1.0.0-1) unstable; urgency=low
 
-  * New upstream release 
+  * New upstream release
 
  -- Moshe Zadka <moshez@debian.org>  Tue, 22 Oct 2002 06:22:49 -0500
 
 twisted (0.99.2-4) unstable; urgency=low
 
-  * UGH! Python 2.3 distutils bug is back 
+  * UGH! Python 2.3 distutils bug is back
   * Working around it
 
  -- Moshe Zadka <moshez@debian.org>  Wed,  2 Oct 2002 12:07:25 +0000
@@ -772,7 +900,7 @@ twisted (0.99.2-3) unstable; urgency=low
 
 twisted (0.99.2-2) unstable; urgency=low
 
-  * Enabling Python 2.3 support 
+  * Enabling Python 2.3 support
 
  -- Moshe Zadka <moshez@debian.org>  Fri, 27 Sep 2002 10:49:43 -0500
 
@@ -796,7 +924,7 @@ twisted (0.99.0-1) unstable; urgency=low
 
 twisted (0.19.0-2) unstable; urgency=low
 
-  * Gagh, make python2.2-twisted any, not all. 
+  * Gagh, make python2.2-twisted any, not all.
 
  -- Moshe Zadka <moshez@debian.org>  Wed, 31 Jul 2002 02:25:23 -0500
 
@@ -828,14 +956,14 @@ twisted (0.18.0-1) unstable; urgency=low
     * menu support for t-im and manhole enabled
   * Removed debelper
     * Added debian/scripts/ directory with helper scripts
-    * This will (hopefully) mean support python2.3 will be easy 
+    * This will (hopefully) mean support python2.3 will be easy
   * Upstream fixed tcp client (Closes: #142789)
 
  -- Moshe Zadka <moshez@debian.org>  Tue, 28 May 2002 12:35:35 +0300
 
 twisted (0.17.3-1) unstable; urgency=low
 
-  * New upstream release 
+  * New upstream release
 
  -- Moshe Zadka <moshez@debian.org>  Fri, 19 Apr 2002 02:55:43 -0500
 
@@ -850,7 +978,7 @@ twisted (0.17.0-1) unstable; urgency=low
 
 twisted (0.15.5-1) unstable; urgency=low
 
-  * New upstream release 
+  * New upstream release
 
  -- Moshe Zadka <moshez@debian.org>  Fri,  8 Mar 2002 07:14:16 +0200
 
@@ -864,7 +992,7 @@ twisted (0.15.4-1) unstable; urgency=low
 twisted (0.15.3-1) unstable; urgency=low
 
   * New upstream release
-  * Fixed stupidproxy bug, where connections weren't closed 
+  * Fixed stupidproxy bug, where connections weren't closed
 
  -- Moshe Zadka <moshez@debian.org>  Thu, 28 Feb 2002 21:07:28 +0200
 
@@ -882,7 +1010,7 @@ twisted (0.15.0-1) unstable; urgency=low
   * SOCKSv4 support
   * bugs fixed in t.i.tcp
   * added approveConnection (again ;-)
-  * All non-blocking methods now return deferreds instead of accepting 
+  * All non-blocking methods now return deferreds instead of accepting
     callbacks (hopefully)
   * low-level protocol changes
   * New t.web applications and features
@@ -893,7 +1021,7 @@ twisted (0.15.0-1) unstable; urgency=low
 
 twisted (0.13.0-1) unstable; urgency=low
 
-  * New upstream version 
+  * New upstream version
   * New forum
   * New config interface
   * New metrics
@@ -902,20 +1030,20 @@ twisted (0.13.0-1) unstable; urgency=low
 
 twisted (0.12.2-1) unstable; urgency=low
 
-  * New upstream versions (many bugfixes) 
+  * New upstream versions (many bugfixes)
 
  -- Moshe Zadka <moshez@debian.org>  Thu, 29 Nov 2001 08:01:23 +0200
 
 twisted (0.12.1-1) unstable; urgency=low
 
-  * New upstream version (mainly bugfixes) 
+  * New upstream version (mainly bugfixes)
 
  -- Moshe Zadka <moshez@debian.org>  Thu, 22 Nov 2001 09:09:14 +0200
 
 twisted (0.12.0-1) unstable; urgency=low
 
   * New upstream version
-  * Using Python 2.1 
+  * Using Python 2.1
 
  -- Moshe Zadka <moshez@debian.org>  Wed, 21 Nov 2001 15:17:25 +0200
 
@@ -932,7 +1060,7 @@ twisted (0.10.2-1) unstable; urgency=low
 
   * New upstream release
   * bug fixes
-  * timeouts for client sockets 
+  * timeouts for client sockets
   * Tutorial about plugins
   * Mail has changed API in an incompatible way
 
@@ -940,14 +1068,14 @@ twisted (0.10.2-1) unstable; urgency=low
 
 twisted (0.10.1-1) unstable; urgency=low
 
-  * New upstream release 
+  * New upstream release
   * Massive renaming in prespective broker classes
   * web proxying
   * TCP connection forwarding
   * Lots of new protocols: LDAP, finger and obscure RFCs
   * --plugin option to twistd
   * web widgets
-  * twisted.enterprise improved a lot 
+  * twisted.enterprise improved a lot
 
  -- Moshe Zadka <moshez@debian.org>  Fri, 31 Aug 2001 06:49:00 +0300
 

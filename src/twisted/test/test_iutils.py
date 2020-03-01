@@ -170,9 +170,6 @@ class ProcessUtilsTests(unittest.TestCase):
         d = utils.getProcessOutputAndValue(self.exe, ['-u', scriptFile])
         d = self.assertFailure(d, tuple)
         return d.addCallback(gotOutputAndValue)
-
-    if _PY3:
-        test_outputSignal.skip = "Test hangs on Python 3 (#8583)"
     if platform.isWindows():
         test_outputSignal.skip = "Windows doesn't have real signals."
 
@@ -226,7 +223,7 @@ class ProcessUtilsTests(unittest.TestCase):
         scriptFile = self.makeSourceFile([
                 "import os, sys, stat",
                 # Fix the permissions so we can report the working directory.
-                # On OS X (and maybe elsewhere), os.getcwd() fails with EACCES
+                # On macOS (and maybe elsewhere), os.getcwd() fails with EACCES
                 # if +x is missing from the working directory.
                 "os.chmod(%r, stat.S_IXUSR)" % (dir,),
                 "sys.stdout.write(os.getcwd())"])
