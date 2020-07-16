@@ -1,3 +1,9 @@
+twisted (18.9.0-3pexip2) pexip; urgency=medium
+
+  * Rebuild in buster environment
+
+ -- Steve McIntyre <steve.mcintyre@pexip.com>  Thu, 16 Jul 2020 07:12:45 +0000
+
 twisted (18.9.0-3pexip1) pexip; urgency=medium
 
   * Migrate to Buster
