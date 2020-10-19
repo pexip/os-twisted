@@ -655,8 +655,6 @@ src/twisted/conch/client/direct.py
 src/twisted/conch/client/knownhosts.py
 src/twisted/conch/client/options.py
 src/twisted/conch/insults/__init__.py
-src/twisted/conch/insults/client.py
-src/twisted/conch/insults/colors.py
 src/twisted/conch/insults/helper.py
 src/twisted/conch/insults/insults.py
 src/twisted/conch/insults/text.py
@@ -784,6 +782,7 @@ src/twisted/internet/ssl.py
 src/twisted/internet/stdio.py
 src/twisted/internet/task.py
 src/twisted/internet/tcp.py
+src/twisted/internet/testing.py
 src/twisted/internet/threads.py
 src/twisted/internet/tksupport.py
 src/twisted/internet/udp.py
@@ -833,6 +832,7 @@ src/twisted/internet/test/test_coroutines.py
 src/twisted/internet/test/test_default.py
 src/twisted/internet/test/test_endpoints.py
 src/twisted/internet/test/test_epollreactor.py
+src/twisted/internet/test/test_error.py
 src/twisted/internet/test/test_fdset.py
 src/twisted/internet/test/test_filedescriptor.py
 src/twisted/internet/test/test_gireactor.py
@@ -854,6 +854,7 @@ src/twisted/internet/test/test_sigchld.py
 src/twisted/internet/test/test_socket.py
 src/twisted/internet/test/test_stdio.py
 src/twisted/internet/test/test_tcp.py
+src/twisted/internet/test/test_testing.py
 src/twisted/internet/test/test_threads.py
 src/twisted/internet/test/test_time.py
 src/twisted/internet/test/test_tls.py
@@ -869,6 +870,7 @@ src/twisted/internet/test/fake_CAs/thing2-duplicate.pem
 src/twisted/internet/test/fake_CAs/thing2.pem
 src/twisted/logger/__init__.py
 src/twisted/logger/_buffer.py
+src/twisted/logger/_capture.py
 src/twisted/logger/_file.py
 src/twisted/logger/_filter.py
 src/twisted/logger/_flatten.py
@@ -884,6 +886,7 @@ src/twisted/logger/_stdlib.py
 src/twisted/logger/_util.py
 src/twisted/logger/test/__init__.py
 src/twisted/logger/test/test_buffer.py
+src/twisted/logger/test/test_capture.py
 src/twisted/logger/test/test_file.py
 src/twisted/logger/test/test_filter.py
 src/twisted/logger/test/test_flatten.py
@@ -1050,8 +1053,6 @@ src/twisted/protocols/haproxy/test/test_parser.py
 src/twisted/protocols/haproxy/test/test_v1parser.py
 src/twisted/protocols/haproxy/test/test_v2parser.py
 src/twisted/protocols/haproxy/test/test_wrapper.py
-src/twisted/protocols/mice/__init__.py
-src/twisted/protocols/mice/mouseman.py
 src/twisted/protocols/test/__init__.py
 src/twisted/protocols/test/test_basic.py
 src/twisted/protocols/test/test_tls.py
@@ -1223,6 +1224,7 @@ src/twisted/test/test_compat.py
 src/twisted/test/test_context.py
 src/twisted/test/test_cooperator.py
 src/twisted/test/test_defer.py
+src/twisted/test/test_defer.py.3only
 src/twisted/test/test_defgen.py
 src/twisted/test/test_dict.py
 src/twisted/test/test_dirdbm.py
@@ -1248,6 +1250,7 @@ src/twisted/test/test_main.py
 src/twisted/test/test_memcache.py
 src/twisted/test/test_modules.py
 src/twisted/test/test_monkey.py
+src/twisted/test/test_news.py
 src/twisted/test/test_nooldstyle.py
 src/twisted/test/test_paths.py
 src/twisted/test/test_pcp.py
@@ -1270,7 +1273,6 @@ src/twisted/test/test_sslverify.py
 src/twisted/test/test_stateful.py
 src/twisted/test/test_stdio.py
 src/twisted/test/test_strerror.py
-src/twisted/test/test_stringtransport.py
 src/twisted/test/test_strports.py
 src/twisted/test/test_task.py
 src/twisted/test/test_tcp.py
@@ -1313,6 +1315,7 @@ src/twisted/trial/_dist/test/test_worker.py
 src/twisted/trial/_dist/test/test_workerreporter.py
 src/twisted/trial/_dist/test/test_workertrial.py
 src/twisted/trial/test/__init__.py
+src/twisted/trial/test/_assertiontests.py.3only
 src/twisted/trial/test/detests.py
 src/twisted/trial/test/erroneous.py
 src/twisted/trial/test/mockcustomsuite.py
@@ -1386,6 +1389,7 @@ src/twisted/web/_auth/digest.py
 src/twisted/web/_auth/wrapper.py
 src/twisted/web/test/__init__.py
 src/twisted/web/test/_util.py
+src/twisted/web/test/injectionhelpers.py
 src/twisted/web/test/requesthelper.py
 src/twisted/web/test/test_agent.py
 src/twisted/web/test/test_cgi.py

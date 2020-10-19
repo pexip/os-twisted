@@ -1,3 +1,150 @@
+twisted (20.3.0-3) unstable; urgency=medium
+
+  * Update python3-twisted dependencies to match upstream tls and conch
+    extras: in particular, the missing dependency on python3-bcrypt broke
+    openssh's autopkgtests.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 19 Oct 2020 23:13:43 +0100
+
+twisted (20.3.0-2) unstable; urgency=medium
+
+  * Upload to unstable
+
+  [ Ondřej Nový ]
+  * d/control: Update Maintainer field with new Debian Python Team
+    contact address.
+  * d/control: Update Vcs-* fields with new Debian Python Team Salsa
+    layout.
+
+  [ Andrej Shadura ]
+  * Bump debhelper from old 12 to 13.
+  * Update standards version to 4.5.0, no changes needed.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Wed, 14 Oct 2020 15:19:41 +0200
+
+twisted (20.3.0-1) experimental; urgency=medium
+
+  * New upstream release 20.3.0.
+  * Drop patches applies upstream.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 23 Mar 2020 21:08:16 +0100
+
+twisted (19.10.0~rc1-1) experimental; urgency=medium
+
+  * New upstream 19.10.0 release candidate 1.
+
+ -- Matthias Klose <doko@debian.org>  Sun, 27 Oct 2019 21:07:04 +0100
+
+twisted (18.9.0-11) unstable; urgency=medium
+
+  * Drop python2 support; Closes: #938731
+
+ -- Sandro Tosi <morph@debian.org>  Wed, 01 Apr 2020 20:34:17 -0400
+
+twisted (18.9.0-10) unstable; urgency=medium
+
+  * The package currently doesn’t build apidocs, make this non-fatal.
+    When apidocs aren’t available, skip fixing up the URLs so that the
+    online version can be used.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Fri, 27 Mar 2020 10:59:44 +0100
+
+twisted (18.9.0-9) unstable; urgency=medium
+
+  * Wrap long lines in changelog entries: 18.9.0-2.
+  * Bump debhelper from old 9 to 12.
+  * Convert debian/copyright to the machine-readable format.
+    Also provide fill.copyright.blanks.yml for scan-copyrights to
+    make it easier to update it in future.
+  * Fix day-of-week for changelog entries 1.1.2-1, 1.1.0-1, 1.0.7-1.
+  * Set upstream metadata fields: Repository, Repository-Browse.
+  * Improve building without documentation:
+    - DEB_BUILD_OPTIONS has to have nodoc, not nodocs to skip docs.
+    - Not only don’t install them, but don’t build them either.
+    - Support nodoc build profile.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 26 Mar 2020 17:31:42 +0100
+
+twisted (18.9.0-8) unstable; urgency=high
+
+  * A no-change upload to set urgency to high since the upload
+    fixes security issues.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 23 Mar 2020 21:14:09 +0100
+
+twisted (18.9.0-7) unstable; urgency=medium
+
+  [ Marc Deslauriers ]
+  * SECURITY UPDATE: incorrect URI and HTTP method validation
+    - debian/patches/CVE-2019-12387.patch: prevent CRLF injections in
+      src/twisted/web/_newclient.py, src/twisted/web/client.py,
+      src/twisted/web/test/injectionhelpers.py,
+      src/twisted/web/test/test_agent.py,
+      src/twisted/web/test/test_webclient.py.
+    - CVE-2019-12387
+    - Closes: #930389
+  * SECURITY UPDATE: incorrect cert validation in XMPP support
+    - debian/patches/CVE-2019-12855-*.patch: upstream patches to implement
+      certificate checking.
+    - CVE-2019-12855
+    - Closes: #930626
+  * SECURITY UPDATE: HTTP/2 denial of service issues
+    - debian/patches/CVE-2019-951x.patch: buffer outbound control frames
+      and timeout invalid clients in src/twisted/web/_http2.py,
+      src/twisted/web/error.py, src/twisted/web/http.py,
+      src/twisted/web/test/test_http.py,
+      src/twisted/web/test/test_http2.py.
+    - CVE-2019-9511
+    - CVE-2019-9514
+    - CVE-2019-9515
+  * SECURITY UPDATE: request smuggling attacks
+    - debian/patches/CVE-2020-1010x-pre1.patch: refactor to reduce
+      duplication in src/twisted/web/test/test_http.py.
+    - debian/patches/CVE-2020-1010x.patch: fix several request smuggling
+      attacks in src/twisted/web/http.py,
+      src/twisted/web/test/test_http.py.
+    - CVE-2020-10108
+    - CVE-2020-10109
+    - Closes: #953950
+
+  [ Emmanuel Arias ]
+  * Add patch to fix SyntaxWarning (Closes: #948560).
+
+  [ Moritz Muehlenhoff  ]
+  * Remove Suggests on python-gtk2/python-glade2, which is being removed.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 23 Mar 2020 20:49:21 +0100
+
+twisted (18.9.0-6) unstable; urgency=medium
+
+  * Use python2 in the Python2 autopkg test.
+  * python-twisted-*-dbg: Depend on python2-dbg instead of python-dbg.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 09 Jan 2020 21:25:22 +0100
+
+twisted (18.9.0-5) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * Use debhelper-compat instead of debian/compat
+  * Add python{,3}-hamcrest to B-D (Closes: #943582).
+  * Add python{,3}-hamcrest to B-D and D (Closes: #943582).
+
+ -- Balint Reczey <rbalint@ubuntu.com>  Thu, 07 Nov 2019 17:05:21 +0100
+
+twisted (18.9.0-4) unstable; urgency=medium
+
+  [ Matthias Klose ]
+  * Fix installation of python3.8 extensions.
+  * Bump standards version.
+  * Build-depend on python2-doc instead of python-doc.
+  * Use python2 as shebang for the Python2 packages.
+
+  [ Julian Andres Klode ]
+  * Add missing Depends for python{,3}-idna to python{,3}-twisted-core, as
+    they are needed for TLS support. Closes: #935965.
+
+ -- Matthias Klose <doko@debian.org>  Sat, 19 Oct 2019 13:24:26 +0200
+
 twisted (18.9.0-3) unstable; urgency=medium
 
   * Don't fix package substvars in binary-arch:, they did not depend on hamcrest
@@ -6,7 +153,8 @@ twisted (18.9.0-3) unstable; urgency=medium
 
 twisted (18.9.0-2) unstable; urgency=medium
 
-  * Don't generate dependency on python{,3}-hamcrest, it is just a test dependency
+  * Don't generate dependency on python{,3}-hamcrest, it is just a test
+    dependency
   * Demote Python serial and pam modules from Recommends: to Suggests:
     (Closes: #599665)
 
@@ -794,7 +942,7 @@ twisted (1.1.2-1) unstable; urgency=low
 
   * New upstream version
 
- -- Moshe Zadka <moshez@debian.org>  Thu, 18 Feb 2004 12:03:02 -0500
+ -- Moshe Zadka <moshez@debian.org>  Wed, 18 Feb 2004 12:03:02 -0500
 
 twisted (1.1.1-1) unstable; urgency=low
 
@@ -806,13 +954,13 @@ twisted (1.1.0-1) unstable; urgency=low
 
   * New upstream version
 
- -- Moshe Zadka <moshez@debian.org>  Thu, 21 Nov 2003 14:56:54 -0500
+ -- Moshe Zadka <moshez@debian.org>  Fri, 21 Nov 2003 14:56:54 -0500
 
 twisted (1.0.7-1) unstable; urgency=low
 
   * New upstream version
 
- -- Moshe Zadka <moshez@debian.org>  Thu, 17 Sep 2003 00:33:51 -0500
+ -- Moshe Zadka <moshez@debian.org>  Wed, 17 Sep 2003 00:33:51 -0500
 
 twisted (1.0.6-1) unstable; urgency=low
 
