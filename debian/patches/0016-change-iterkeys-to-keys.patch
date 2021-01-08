@@ -1,0 +1,23 @@
+From e101c5016c2991aa6f0c9796b23df186c459e318 Mon Sep 17 00:00:00 2001
+From: Craig Rodrigues <rodrigc@FreeBSD.org>
+Date: Tue, 24 Mar 2020 10:53:31 -0700
+Subject: [PATCH] Change iterkeys() to keys(), since iterkeys() does not exist
+ in Python 3
+
+---
+ src/twisted/names/authority.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/twisted/names/authority.py b/src/twisted/names/authority.py
+index 1abc4f828dc..6d13e426a8e 100644
+--- a/src/twisted/names/authority.py
++++ b/src/twisted/names/authority.py
+@@ -305,7 +305,7 @@ def wrapRecord(self, type):
+
+     def setupConfigNamespace(self):
+         r = {}
+-        items = dns.__dict__.iterkeys()
++        items = dns.__dict__.keys()
+         for record in [x for x in items if x.startswith('Record_')]:
+             type = getattr(dns, record)
+             f = self.wrapRecord(type)

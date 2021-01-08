@@ -1,3 +1,9 @@
+twisted (18.9.0-3pexip3) pexip; urgency=medium
+
+  * Change iterkeys() to keys() to prevent python 3 crashes
+
+ -- Huw Jones <huw@pexip.com>  Fri, 8 Jan 2021 15:40:00 +0000
+
 twisted (18.9.0-3pexip2) pexip; urgency=medium
 
   * Rebuild in buster environment
