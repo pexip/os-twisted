@@ -8,9 +8,8 @@
 0009-no-stderr-in-test_ckeygen.patch
 0010-handle-setlocale-test-failure.patch
 0010-spurious-failure-in-setup-unit-tests.patch
-0011-Ignore-fuction-name-in-SSL-error-code-in-tests-to-wo.patch
+#0011-Ignore-fuction-name-in-SSL-error-code-in-tests-to-wo.patch
 0012-Skip-test-for-empty-cypher-string-openssl-does-not-t.patch
 0013-Drop-test_givesMeaningfulErrorMessageIfNoCipherMatch.patch
-0014-OpenSSL-may-not-use-ECDH-by-default-thus-drop-this-t.patch
 0015-Fix-tests-to-expect-new-web-request-logging-format.patch
 0016-change-iterkeys-to-keys.patch
