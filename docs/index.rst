@@ -6,7 +6,6 @@ Contents:
 .. toctree::
     :maxdepth: 2
     :includehidden:
-    :titlesonly:
 
     installation/index
     core/index
