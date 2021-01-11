@@ -1,3 +1,10 @@
+twisted (20.3.0-3pexip1) pexip; urgency=medium
+
+  * Migrate to Bullseye
+  * Revert debhelper from 13 to 12 to build on buster.
+
+ -- Huw Jones <huw@pexip.com>  Mon, 11 Jan 2021 14:50:10 +0000
+
 twisted (20.3.0-3) pexip; urgency=medium
 
   * Update python3-twisted dependencies to match upstream tls and conch

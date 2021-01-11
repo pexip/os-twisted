@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Pexip AS <packaging@pexip.com>
 XSBC-Pexip-Original-Maintainer: Debian Python Team <team+python@tracker.debian.org>
 XSBC-Pexip-Original-Uploaders: Matthias Klose <doko@debian.org>
-Build-Depends: debhelper-compat (= 13),
+Build-Depends: debhelper-compat (= 12),
                dh-python,
                patch,
                python2-doc,
