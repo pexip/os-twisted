@@ -1,3 +1,9 @@
+twisted (20.3.0-3pexip4) pexip; urgency=medium
+
+  * Add appropriate `super()` usage to fix pylint
+
+ -- Huw Jones <huw@pexip.com>  Wed, 24 Feb 2021 17:19:25 +0000
+
 twisted (20.3.0-3pexip3) pexip; urgency=medium
 
   * Set python-service-identity minimum version for python-twisted-core
