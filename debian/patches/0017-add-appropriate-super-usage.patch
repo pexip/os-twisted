@@ -7,7 +7,7 @@ index 7e4642e..d952cd6 100644
  
      def buildProtocol(self, addr):
 -        p = protocol.ClientFactory.buildProtocol(self, addr)
-+        p = super(protocol.ClientFactory, self).buildProtocol(self, addr)
++        p = super(protocol.ClientFactory, self).buildProtocol(addr)
          p.followRedirect = self.followRedirect
          p.afterFoundGet = self.afterFoundGet
          if self.timeout:

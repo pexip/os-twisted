@@ -1,3 +1,9 @@
+twisted (20.3.0-3pexip5) pexip; urgency=medium
+
+  * Fix `super()` usage in previous version
+
+ -- Huw Jones <huw@pexip.com>  Wed, 24 Feb 2021 18:44:05 +0000
+
 twisted (20.3.0-3pexip4) pexip; urgency=medium
 
   * Add appropriate `super()` usage to fix pylint
