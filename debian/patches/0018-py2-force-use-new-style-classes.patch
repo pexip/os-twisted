@@ -1,0 +1,18 @@
+diff --git a/src/twisted/python/compat.py b/src/twisted/python/compat.py
+index 35def79..7431fc5 100644
+--- a/src/twisted/python/compat.py
++++ b/src/twisted/python/compat.py
+@@ -67,12 +67,7 @@ def _shouldEnableNewStyle():
+ 
+     @rtype: L{bool}
+     """
+-    value = os.environ.get('TWISTED_NEWSTYLE', '')
+-
+-    if value in ['', 'no', 'false', 'False', '0']:
+-        return False
+-    else:
+-        return True
++    return True
+ 
+ 
+ _EXPECT_NEWSTYLE = _PY3 or _shouldEnableNewStyle()

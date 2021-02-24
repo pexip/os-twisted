@@ -14,3 +14,4 @@
 0015-Fix-tests-to-expect-new-web-request-logging-format.patch
 0016-change-iterkeys-to-keys.patch
 0017-add-appropriate-super-usage.patch
+0018-py2-force-use-new-style-classes.patch

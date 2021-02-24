@@ -1,3 +1,9 @@
+twisted (20.3.0-3pexip6) pexip; urgency=medium
+
+  * Force Python 2 to always use new style classes
+
+ -- Huw Jones <huw@pexip.com>  Wed, 24 Feb 2021 20:04:27 +0000
+
 twisted (20.3.0-3pexip5) pexip; urgency=medium
 
   * Fix `super()` usage in previous version
