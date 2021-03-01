@@ -1,0 +1,255 @@
+From: Sergio Durigan Junior <sergiodj@debian.org>
+Date: Fri, 12 Feb 2021 19:55:33 -0500
+Subject: Rename imap4-utf-7 to imap_utf_7
+
+Python 3.9 requires this new name for the encoding.
+
+Author: Sergio Durigan Junior <sergiodj@debian.org>
+Forwarded: not-needed
+Last-Updated: 2021-02-13
+---
+ src/twisted/mail/imap4.py          | 28 ++++++++++++------------
+ src/twisted/mail/test/test_imap.py | 44 +++++++++++++++++++-------------------
+ 2 files changed, 36 insertions(+), 36 deletions(-)
+
+diff --git a/src/twisted/mail/imap4.py b/src/twisted/mail/imap4.py
+index 7949ef5..0cfb5d0 100644
+--- a/src/twisted/mail/imap4.py
++++ b/src/twisted/mail/imap4.py
+@@ -1413,7 +1413,7 @@ class IMAP4Server(basic.LineReceiver, policies.TimeoutMixin):
+         try:
+             self.account.delete(name)
+         except MailboxException as m:
+-            self.sendNegativeResponse(tag, str(m).encode("imap4-utf-7"))
++            self.sendNegativeResponse(tag, str(m).encode("imap_utf_7"))
+         except:
+             self.sendBadResponse(tag, b"Server error encountered while deleting mailbox")
+             log.err()
+@@ -1490,8 +1490,8 @@ class IMAP4Server(basic.LineReceiver, policies.TimeoutMixin):
+         for (name, box) in mailboxes:
+             if not sub or self.account.isSubscribed(name):
+                 flags = [networkString(flag) for flag in box.getFlags()]
+-                delim = box.getHierarchicalDelimiter().encode('imap4-utf-7')
+-                resp = (DontQuoteMe(cmdName), map(DontQuoteMe, flags), delim, name.encode('imap4-utf-7'))
++                delim = box.getHierarchicalDelimiter().encode('imap_utf_7')
++                resp = (DontQuoteMe(cmdName), map(DontQuoteMe, flags), delim, name.encode('imap_utf_7'))
+                 self.sendUntaggedResponse(collapseNestedLists(resp))
+         self.sendPositiveResponse(tag, cmdName + b' completed')
+ 
+@@ -1541,7 +1541,7 @@ class IMAP4Server(basic.LineReceiver, policies.TimeoutMixin):
+     def __cbStatus(self, status, tag, box):
+         # STATUS names should only be ASCII
+         line = networkString(' '.join(['%s %s' % x for x in status.items()]))
+-        self.sendUntaggedResponse(b'STATUS ' + box.encode('imap4-utf-7') + b' ('+ line + b')')
++        self.sendUntaggedResponse(b'STATUS ' + box.encode('imap_utf_7') + b' ('+ line + b')')
+         self.sendPositiveResponse(tag, b'STATUS complete')
+ 
+ 
+@@ -3183,12 +3183,12 @@ class IMAP4Client(basic.LineReceiver, policies.TimeoutMixin):
+         #
+         # On Python 3, users specify mailboxes with native strings, so
+         # they should receive namespaces and delimiters as native
+-        # strings.  Both cases are possible because of the imap4-utf-7
++        # strings.  Both cases are possible because of the imap_utf_7
+         # encoding.
+         if _PY3:
+             def _prepareNamespaceOrDelimiter(namespaceList):
+                 return [
+-                    element.decode('imap4-utf-7') for element in namespaceList
++                    element.decode('imap_utf_7') for element in namespaceList
+                 ]
+         else:
+             def _prepareNamespaceOrDelimiter(element):
+@@ -3476,7 +3476,7 @@ class IMAP4Client(basic.LineReceiver, policies.TimeoutMixin):
+             delimiter and the mailbox name are L{str}s.
+         """
+         cmd = b'LIST'
+-        args = ('"%s" "%s"' % (reference, wildcard)).encode("imap4-utf-7")
++        args = ('"%s" "%s"' % (reference, wildcard)).encode("imap_utf_7")
+         resp = (b'LIST',)
+         d = self.sendCommand(Command(cmd, args, wantResponse=resp))
+         d.addCallback(self.__cbList, b'LIST')
+@@ -3496,7 +3496,7 @@ class IMAP4Client(basic.LineReceiver, policies.TimeoutMixin):
+         cmd = b'LSUB'
+ 
+         encodedReference = reference.encode('ascii')
+-        encodedWildcard = wildcard.encode('imap4-utf-7')
++        encodedWildcard = wildcard.encode('imap_utf_7')
+         args = b"".join([
+             b'"', encodedReference, b'"'
+             b' "', encodedWildcard, b'"',
+@@ -3522,15 +3522,15 @@ class IMAP4Client(basic.LineReceiver, policies.TimeoutMixin):
+                 # On Python 3, users specify mailboxes with native
+                 # strings, so they should receive mailboxes as native
+                 # strings.  Both cases are possible because of the
+-                # imap4-utf-7 encoding.
++                # imap_utf_7 encoding.
+                 #
+                 # Mailbox names contain the hierarchical delimiter, so
+                 # it too should be a native string.
+                 if _PY3:
+                     # delimiter
+-                    parts[2] = parts[2].decode('imap4-utf-7')
++                    parts[2] = parts[2].decode('imap_utf_7')
+                     # mailbox
+-                    parts[3] = parts[3].decode('imap4-utf-7')
++                    parts[3] = parts[3].decode('imap_utf_7')
+ 
+                 results.append(tuple(parts[1:]))
+         return results
+@@ -4989,7 +4989,7 @@ def _parseMbox(name):
+     if isinstance(name, unicode):
+         return name
+     try:
+-        return name.decode('imap4-utf-7')
++        return name.decode('imap_utf_7')
+     except:
+         log.err()
+         raise IllegalMailboxEncoding(name)
+@@ -4999,7 +4999,7 @@ def _parseMbox(name):
+ def _prepareMailboxName(name):
+     if not isinstance(name, unicode):
+         name = name.decode("charmap")
+-    name = name.encode('imap4-utf-7')
++    name = name.encode('imap_utf_7')
+     if _needsQuote(name):
+         return _quote(name)
+     return name
+@@ -6368,7 +6368,7 @@ _codecInfo = codecs.CodecInfo(encoder, decoder, StreamReader, StreamWriter)
+ 
+ 
+ def imap4_utf_7(name):
+-    if name == 'imap4-utf-7':
++    if name == 'imap_utf_7':
+         return _codecInfo
+ 
+ codecs.register(imap4_utf_7)
+diff --git a/src/twisted/mail/test/test_imap.py b/src/twisted/mail/test/test_imap.py
+index 231140c..ce6e516 100644
+--- a/src/twisted/mail/test/test_imap.py
++++ b/src/twisted/mail/test/test_imap.py
+@@ -71,13 +71,13 @@ class IMAP4UTF7Tests(unittest.TestCase):
+     def test_encodeWithErrors(self):
+         """
+         Specifying an error policy to C{unicode.encode} with the
+-        I{imap4-utf-7} codec should produce the same result as not
++        I{imap_utf_7} codec should produce the same result as not
+         specifying the error policy.
+         """
+         text = u'Hello world'
+         self.assertEqual(
+-            text.encode('imap4-utf-7', 'strict'),
+-            text.encode('imap4-utf-7'))
++            text.encode('imap_utf_7', 'strict'),
++            text.encode('imap_utf_7'))
+ 
+ 
+     def test_decodeWithErrors(self):
+@@ -86,69 +86,69 @@ class IMAP4UTF7Tests(unittest.TestCase):
+         """
+         bytes = b'Hello world'
+         self.assertEqual(
+-            bytes.decode('imap4-utf-7', 'strict'),
+-            bytes.decode('imap4-utf-7'))
++            bytes.decode('imap_utf_7', 'strict'),
++            bytes.decode('imap_utf_7'))
+ 
+ 
+     def test_encodeAmpersand(self):
+         """
+         Unicode strings that contain an ampersand (C{&}) can be
+-        encoded to bytes with the I{imap4-utf-7} codec.
++        encoded to bytes with the I{imap_utf_7} codec.
+         """
+         text = u"&Hello&\N{VULGAR FRACTION ONE HALF}&"
+         self.assertEqual(
+-            text.encode("imap4-utf-7"),
++            text.encode("imap_utf_7"),
+             b'&-Hello&-&AL0-&-',
+         )
+ 
+ 
+     def test_decodeWithoutFinalASCIIShift(self):
+         """
+-        An I{imap4-utf-7} encoded string that does not shift back to
++        An I{imap_utf_7} encoded string that does not shift back to
+         ASCII (i.e., it lacks a final C{-}) can be decoded.
+         """
+         self.assertEqual(
+-            b'&AL0'.decode('imap4-utf-7'),
++            b'&AL0'.decode('imap_utf_7'),
+             u"\N{VULGAR FRACTION ONE HALF}",
+         )
+ 
+ 
+     def test_getreader(self):
+         """
+-        C{codecs.getreader('imap4-utf-7')} returns the I{imap4-utf-7} stream
++        C{codecs.getreader('imap_utf_7')} returns the I{imap4-utf-7} stream
+         reader class.
+         """
+-        reader = codecs.getreader('imap4-utf-7')(BytesIO(b'Hello&AP8-world'))
++        reader = codecs.getreader('imap_utf_7')(BytesIO(b'Hello&AP8-world'))
+         self.assertEqual(reader.read(), u'Hello\xffworld')
+ 
+ 
+     def test_getwriter(self):
+         """
+-        C{codecs.getwriter('imap4-utf-7')} returns the I{imap4-utf-7} stream
++        C{codecs.getwriter('imap_utf_7')} returns the I{imap4-utf-7} stream
+         writer class.
+         """
+         output = BytesIO()
+-        writer = codecs.getwriter('imap4-utf-7')(output)
++        writer = codecs.getwriter('imap_utf_7')(output)
+         writer.write(u'Hello\xffworld')
+         self.assertEqual(output.getvalue(), b'Hello&AP8-world')
+ 
+ 
+     def test_encode(self):
+         """
+-        The I{imap4-utf-7} can be used to encode a unicode string into a byte
++        The I{imap_utf_7} can be used to encode a unicode string into a byte
+         string according to the IMAP4 modified UTF-7 encoding rules.
+         """
+         for (input, output) in self.tests:
+-            self.assertEqual(input.encode('imap4-utf-7'), output)
++            self.assertEqual(input.encode('imap_utf_7'), output)
+ 
+ 
+     def test_decode(self):
+         """
+-        The I{imap4-utf-7} can be used to decode a byte string into a unicode
++        The I{imap_utf_7} can be used to decode a byte string into a unicode
+         string according to the IMAP4 modified UTF-7 encoding rules.
+         """
+         for (input, output) in self.tests:
+-            self.assertEqual(input, output.decode('imap4-utf-7'))
++            self.assertEqual(input, output.decode('imap_utf_7'))
+ 
+ 
+     def test_printableSingletons(self):
+@@ -159,10 +159,10 @@ class IMAP4UTF7Tests(unittest.TestCase):
+         # All printables represent themselves
+         for o in chain(range(0x20, 0x26), range(0x27, 0x7f)):
+             charbyte = chr(o).encode()
+-            self.assertEqual(charbyte, chr(o).encode('imap4-utf-7'))
+-            self.assertEqual(chr(o), charbyte.decode('imap4-utf-7'))
+-        self.assertEqual(u'&'.encode('imap4-utf-7'), b'&-')
+-        self.assertEqual(b'&-'.decode('imap4-utf-7'), u'&')
++            self.assertEqual(charbyte, chr(o).encode('imap_utf_7'))
++            self.assertEqual(chr(o), charbyte.decode('imap_utf_7'))
++        self.assertEqual(u'&'.encode('imap_utf_7'), b'&-')
++        self.assertEqual(b'&-'.decode('imap_utf_7'), u'&')
+ 
+ 
+ 
+@@ -2746,7 +2746,7 @@ class IMAP4ServerTests(IMAP4HelperMixin, unittest.TestCase):
+                         # Using networkString is cheating!  In this
+                         # particular case the mailbox name happens to
+                         # be ASCII.  In real code, the mailbox would
+-                        # be encoded with imap4-utf-7.
++                        # be encoded with imap_utf_7.
+                         networkString(
+                             'PARTIAL/SUBTHING '
+                             '(\\SEEN) "Right now" '

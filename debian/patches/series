@@ -8,10 +8,20 @@
 0009-no-stderr-in-test_ckeygen.patch
 0010-handle-setlocale-test-failure.patch
 0010-spurious-failure-in-setup-unit-tests.patch
-#0011-Ignore-fuction-name-in-SSL-error-code-in-tests-to-wo.patch
 0012-Skip-test-for-empty-cypher-string-openssl-does-not-t.patch
 0013-Drop-test_givesMeaningfulErrorMessageIfNoCipherMatch.patch
 0015-Fix-tests-to-expect-new-web-request-logging-format.patch
+0014-Try-exec-ing-ckeygen3-if-ckeygen-was-not-found.patch
+0015-Add-digestmod-parameter-to-HMAC.__init__-invocations.patch
+0016-Make-the-twisted-tests-work-when-pyOpenSSL-deletes-N.patch
+0017-Replace-base64.-string-functions-to-fix-py3.9-suppor.patch
+0018-Rename-imap4-utf-7-to-imap_utf_7.patch
+0019-Merge-9652-wiml-mktime-Allow-mktime-to-raise-EOVERFL.patch
+0020-increase-size-of-FFDH-keys-for-conch-testing.patch
+0021-Merge-9801-rodrigc-cgi-Change-import-of-cgi.parse_qs.patch
+0022-fixed-corrupted-iqmp-value-in-test-RSA-key.patch
+
+# Pexip extras
 0016-change-iterkeys-to-keys.patch
 0017-add-appropriate-super-usage.patch
 0018-py2-force-use-new-style-classes.patch

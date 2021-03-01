@@ -1,3 +1,34 @@
+twisted (20.3.0-4pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- Steve McIntyre <steve.mcintyre@pexip.com>  Mon, 01 Mar 2021 11:55:54 +0000
+
+twisted (20.3.0-4) unstable; urgency=medium
+
+  * Team upload.
+  * Fix several autopkgtest failures. (Closes: #979838)
+    - d/p/0014-Rename-ckeygen-to-ckeygen3.patch: Rename ckeygen to
+      ckeygen3.
+    - d/p/0015-Add-digestmod-parameter-to-HMAC.__init__-invocations.patch:
+      Add digestmod parameter to HMAC.__init__() invocations.
+    - d/p/0016-Make-the-twisted-tests-work-when-pyOpenSSL-deletes-N.patch:
+      Make the twisted tests work when pyOpenSSL deletes NPN.
+    - d/p/0017-Replace-base64.-string-functions-to-fix-py3.9-suppor.patch:
+      Replace base64.*string() functions to fix py3.9 support.
+    - d/p/0018-Rename-imap4-utf-7-to-imap_utf_7.patch:
+      Rename imap4-utf-7 to imap_utf_7.
+    - d/p/0019-Merge-9652-wiml-mktime-Allow-mktime-to-raise-EOVERFL.patch:
+      Allow mktime() to raise EOVERFLOW if isdst=1 and there's no DST.
+    - d/p/0020-increase-size-of-FFDH-keys-for-conch-testing.patch:
+      Increase size of FFDH keys for conch testing.
+    - d/p/0021-Merge-9801-rodrigc-cgi-Change-import-of-cgi.parse_qs.patch:
+      Change import of cgi.parse_qs to urllib.parse.parse_qs.
+    - d/p/0022-fixed-corrupted-iqmp-value-in-test-RSA-key.patch:
+      Fix corrupted iqmp value in test RSA key.
+
+ -- Sergio Durigan Junior <sergiodj@debian.org>  Sat, 13 Feb 2021 02:12:02 -0500
+
 twisted (20.3.0-3pexip6) pexip; urgency=medium
 
   * Force Python 2 to always use new style classes
@@ -37,7 +68,7 @@ twisted (20.3.0-3pexip1) pexip; urgency=medium
 
  -- Huw Jones <huw@pexip.com>  Tue, 12 Jan 2021 11:24:15 +0000
 
-twisted (20.3.0-3) pexip; urgency=medium
+twisted (20.3.0-3) unstable; urgency=medium
 
   * Update python3-twisted dependencies to match upstream tls and conch
     extras: in particular, the missing dependency on python3-bcrypt broke

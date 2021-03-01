@@ -7,10 +7,10 @@ Subject: Fix tests to expect new web request logging format
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/twisted/web/test/test_web.py b/src/twisted/web/test/test_web.py
-index 539d099..eba0b0b 100644
+index 6d73b83..e89f76e 100644
 --- a/src/twisted/web/test/test_web.py
 +++ b/src/twisted/web/test/test_web.py
-@@ -1549,7 +1549,7 @@ class CombinedLogFormatterTests(unittest.TestCase):
+@@ -1641,7 +1641,7 @@ class CombinedLogFormatterTests(unittest.TestCase):
  
          line = http.combinedLogFormatter(timestamp, request)
          self.assertEqual(
@@ -19,7 +19,7 @@ index 539d099..eba0b0b 100644
              u'"GET /dummy HTTP/1.0" 123 - "-" "-"',
              line)
  
-@@ -1573,7 +1573,7 @@ class CombinedLogFormatterTests(unittest.TestCase):
+@@ -1665,7 +1665,7 @@ class CombinedLogFormatterTests(unittest.TestCase):
          request.client = UnknowableAddress()
  
          line = http.combinedLogFormatter(timestamp, request)
