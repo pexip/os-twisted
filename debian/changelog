@@ -1,3 +1,9 @@
+twisted (20.3.0-4pexip2) pexip; urgency=medium
+
+  * Disable some of the new patches so this works with python 2 again.
+
+ -- Steve McIntyre <steve.mcintyre@pexip.com>  Thu, 04 Mar 2021 15:08:37 +0000
+
 twisted (20.3.0-4pexip1) pexip; urgency=medium
 
   * New upstream release
