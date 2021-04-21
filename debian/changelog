@@ -1,3 +1,9 @@
+twisted (20.3.0-4pexip3) pexip; urgency=medium
+
+  * Force trial TestCase to run tearDown/cleanups in the same order as Python unittest
+
+ -- Huw Jones <huw@pexip.com>  Wed, 21 Apr 2021 16:46:55 +0000
+
 twisted (20.3.0-4pexip2) pexip; urgency=medium
 
   * Disable some of the new patches so this works with python 2 again.
