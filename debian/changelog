@@ -1,24 +1,46 @@
+twisted (20.3.0-7) unstable; urgency=medium
+
+  * Team upload.
+  * Use the correct patch for upload (Closes: #984493) Sorry!
+
+ -- Ole Streicher <olebole@debian.org>  Sat, 24 Apr 2021 18:36:24 +0200
+
+twisted (20.3.0-6) unstable; urgency=medium
+
+  * Team upload.
+  * Fix skipIf call to actually fix autopkgtest
+  * Add Gitlab CI configuration
+
+ -- Ole Streicher <olebole@debian.org>  Sat, 24 Apr 2021 18:36:24 +0200
+
+twisted (20.3.0-5) unstable; urgency=medium
+
+  * Team upload.
+  * skip failing QueryArgumentsTests.testParseqs test
+
+ -- Ole Streicher <olebole@debian.org>  Sat, 24 Apr 2021 14:24:44 +0200
+
 twisted (20.3.0-4) unstable; urgency=medium
 
   * Team upload.
   * Fix several autopkgtest failures. (Closes: #979838)
-    - d/p/0014-Rename-ckeygen-to-ckeygen3.patch: Rename ckeygen to
-      ckeygen3.
-    - d/p/0015-Add-digestmod-parameter-to-HMAC.__init__-invocations.patch:
+    - d/p/0016-Try-exec-ing-ckeygen3-if-ckeygen-was-not-found.path:
+      Rename ckeygen to ckeygen3.
+    - d/p/0017-Add-digestmod-parameter-to-HMAC.__init__-invocations.patch:
       Add digestmod parameter to HMAC.__init__() invocations.
-    - d/p/0016-Make-the-twisted-tests-work-when-pyOpenSSL-deletes-N.patch:
+    - d/p/0018-Make-the-twisted-tests-work-when-pyOpenSSL-deletes-N.patch:
       Make the twisted tests work when pyOpenSSL deletes NPN.
-    - d/p/0017-Replace-base64.-string-functions-to-fix-py3.9-suppor.patch:
+    - d/p/0019-Replace-base64.-string-functions-to-fix-py3.9-suppor.patch:
       Replace base64.*string() functions to fix py3.9 support.
-    - d/p/0018-Rename-imap4-utf-7-to-imap_utf_7.patch:
+    - d/p/0020-Fix-imap4-utf-7-codec-lookup-function-for-Python-3.9.patch:
       Rename imap4-utf-7 to imap_utf_7.
-    - d/p/0019-Merge-9652-wiml-mktime-Allow-mktime-to-raise-EOVERFL.patch:
+    - d/p/0021-Merge-9652-wiml-mktime-Allow-mktime-to-raise-EOVERFL.patch:
       Allow mktime() to raise EOVERFLOW if isdst=1 and there's no DST.
-    - d/p/0020-increase-size-of-FFDH-keys-for-conch-testing.patch:
+    - d/p/0022-increase-size-of-FFDH-keys-for-conch-testing.patch:
       Increase size of FFDH keys for conch testing.
-    - d/p/0021-Merge-9801-rodrigc-cgi-Change-import-of-cgi.parse_qs.patch:
+    - d/p/0023-Merge-9801-rodrigc-cgi-Change-import-of-cgi.parse_qs.patch:
       Change import of cgi.parse_qs to urllib.parse.parse_qs.
-    - d/p/0022-fixed-corrupted-iqmp-value-in-test-RSA-key.patch:
+    - d/p/0024-fixed-corrupted-iqmp-value-in-test-RSA-key.patch:
       Fix corrupted iqmp value in test RSA key.
 
  -- Sergio Durigan Junior <sergiodj@debian.org>  Sat, 13 Feb 2021 02:12:02 -0500

@@ -7,10 +7,10 @@ Subject: spurious-failure-in-setup-unit-tests
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/twisted/python/test/test_setup.py b/src/twisted/python/test/test_setup.py
-index 1da974a..3f420fc 100644
+index e55e29c..1ecca8d 100644
 --- a/src/twisted/python/test/test_setup.py
 +++ b/src/twisted/python/test/test_setup.py
-@@ -92,7 +92,7 @@ class OptionalDependenciesTests(SynchronousTestCase):
+@@ -92,7 +92,7 @@ class OptionalDependenciesTests(TestCase):
          The extras need to be parsed with pkg_resources.parse_requirements(),
          which returns a generator.
          """
