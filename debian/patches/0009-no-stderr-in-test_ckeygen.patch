@@ -10,7 +10,7 @@ https://twistedmatrix.com/trac/ticket/8924
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/twisted/conch/test/test_ckeygen.py b/src/twisted/conch/test/test_ckeygen.py
-index bb0696a..f4d5505 100644
+index a840085..41a0208 100644
 --- a/src/twisted/conch/test/test_ckeygen.py
 +++ b/src/twisted/conch/test/test_ckeygen.py
 @@ -7,6 +7,7 @@ Tests for L{twisted.conch.scripts.ckeygen}.
@@ -21,7 +21,7 @@ index bb0696a..f4d5505 100644
  import subprocess
  
  from io import BytesIO, StringIO
-@@ -100,7 +101,10 @@ class KeyGenTests(TestCase):
+@@ -94,7 +95,10 @@ class KeyGenTests(TestCase):
      def test_runBadKeytype(self):
          filename = self.mktemp()
          with self.assertRaises(subprocess.CalledProcessError):
