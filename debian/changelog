@@ -1,3 +1,10 @@
+twisted (20.3.0-7pexip2) pexip; urgency=medium
+
+  * twisted.web.resource.Resource inherit from object to 
+    fix old-old-style class nonsense
+
+ -- Huw Jones <huw@pexip.com>  Mon, 20 Jul 2021 11:52:35 +0100
+
 twisted (20.3.0-7pexip1) pexip; urgency=medium
 
   * Bump version to 20.3.0-7pexip1
