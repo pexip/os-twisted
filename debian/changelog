@@ -1,9 +1,16 @@
+twisted (20.3.0-7pexip3) pexip; urgency=medium
+
+  * twisted.internet.task: fix CooperativeTask in Python 3
+    due to change in StopIteration behaviour
+
+ -- Huw Jones <huw@pexip.com>  Wed, 21 Jul 2021 17:16:37 +0100
+
 twisted (20.3.0-7pexip2) pexip; urgency=medium
 
   * twisted.web.resource.Resource inherit from object to 
     fix old-old-style class nonsense
 
- -- Huw Jones <huw@pexip.com>  Mon, 20 Jul 2021 11:52:35 +0100
+ -- Huw Jones <huw@pexip.com>  Tue, 20 Jul 2021 11:52:35 +0100
 
 twisted (20.3.0-7pexip1) pexip; urgency=medium
 

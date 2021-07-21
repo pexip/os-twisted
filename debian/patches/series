@@ -29,3 +29,4 @@
 0018-py2-force-use-new-style-classes.patch
 0019-trial-cleanup-consistency.patch
 0020-py2-web-resource-class-fix.diff
+0021-task-coop-generator-fix.diff
