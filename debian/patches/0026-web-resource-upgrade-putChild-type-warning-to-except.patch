@@ -1,0 +1,35 @@
+From 8ff0e2f7bd113ac3f14821542ddbb13e5622d6b9 Mon Sep 17 00:00:00 2001
+From: Will Miller <will.miller@pexip.com>
+Date: Fri, 26 Nov 2021 10:12:06 +0000
+Subject: [PATCH] web/resource: upgrade putChild type warning to exception
+ [pexhack]
+
+There's no possible way we could ever mean to do this, so we want to
+blow up in these cases and fix the broken code.
+---
+ src/twisted/web/resource.py | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+--- a/src/twisted/web/resource.py
++++ b/src/twisted/web/resource.py
+@@ -223,13 +223,16 @@
+         @see: L{IResource.putChild}
+         """
+         if not isinstance(path, bytes):
++            msg = (
++                'Path segment must be bytes; '
++                'passing {0} has never worked, and '
++                'will raise an exception in the future.'
++            ).format(type(path))
+             warnings.warn(
+-                'Path segment must be bytes; '
+-                'passing {0} has never worked, and '
+-                'will raise an exception in the future.'
+-                .format(type(path)),
++                msg,
+                 category=DeprecationWarning,
+                 stacklevel=2)
++            raise TypeError(msg)
+ 
+         self.children[path] = child
+         child.server = self.server
