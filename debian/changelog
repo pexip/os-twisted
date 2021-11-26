@@ -1,3 +1,9 @@
+twisted (20.3.0-7pexip4) pexip; urgency=medium
+
+  * twisted.web.resource: upgrade putChild type warning to raise TypeError
+
+ -- Huw Jones <huw@pexip.com>  Fri, 26 Nov 2021 14:35:37 +0000
+
 twisted (20.3.0-7pexip3) pexip; urgency=medium
 
   * twisted.internet.task: fix CooperativeTask in Python 3
