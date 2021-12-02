@@ -31,3 +31,4 @@
 0020-py2-web-resource-class-fix.diff
 0021-task-coop-generator-fix.diff
 0026-web-resource-upgrade-putChild-type-warning-to-except.patch
+0027-twisted-issue-9462.patch
