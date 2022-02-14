@@ -1,0 +1,26 @@
+From 9b1a4fd0de0c048df3e0e0bd2dff298f2ab99470 Mon Sep 17 00:00:00 2001
+From: Huw Jones <huw@pexip.com>
+Date: Mon, 14 Feb 2022 16:57:54 +0000
+Subject: [PATCH] twisted.internet.defer.returnValue: deprecate in favour of
+ `return`
+
+---
+ src/twisted/internet/defer.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/twisted/internet/defer.py b/src/twisted/internet/defer.py
+index 96fa324..20fec4d 100644
+--- a/src/twisted/internet/defer.py
++++ b/src/twisted/internet/defer.py
+@@ -1345,7 +1345,7 @@ class _DefGen_Return(BaseException):
+         self.value = value
+ 
+ 
+-
++@deprecated(Version('Twisted', 20, 3, 0), replacement='return')
+ def returnValue(val):
+     """
+     Return val from a L{inlineCallbacks} generator.
+-- 
+2.30.2
+

@@ -32,3 +32,4 @@
 0021-task-coop-generator-fix.diff
 0026-web-resource-upgrade-putChild-type-warning-to-except.patch
 0027-twisted-issue-9462.patch
+0028-deprecate-twisted.internet.defer.returnValue.patch
