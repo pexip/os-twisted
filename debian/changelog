@@ -1,3 +1,9 @@
+twisted (20.3.0-7pexip7) pexip; urgency=medium
+
+  * twisted.internet.defer: add extra diagnostics to aid debugging reactor stalls
+
+ -- Huw Jones <huw@pexip.com>  Tue, 1 Mar 2022 10:51:13 +0000
+
 twisted (20.3.0-7pexip6) pexip; urgency=medium
 
   * twisted.internet.defer.returnValue: deprecate in favour of `return`

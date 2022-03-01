@@ -1,0 +1,81 @@
+From 25bb048682292bb17c344e9a67921c3af3b439ae Mon Sep 17 00:00:00 2001
+From: Huw Jones <huw@pexip.com>
+Date: Tue, 1 Mar 2022 10:49:47 +0000
+Subject: [PATCH] defer: add extra diagnostics
+
+---
+ src/twisted/internet/defer.py | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/src/twisted/internet/defer.py b/src/twisted/internet/defer.py
+index 96fa324..2782ad6 100644
+--- a/src/twisted/internet/defer.py
++++ b/src/twisted/internet/defer.py
+@@ -908,7 +908,7 @@ def ensureDeferred(coro):
+         from asyncio import iscoroutine
+ 
+         if iscoroutine(coro) or isinstance(coro, GeneratorType):
+-            return _cancellableInlineCallbacks(coro)
++            return _cancellableInlineCallbacks(coro, coro.__name__)
+ 
+     if not isinstance(coro, Deferred):
+         raise ValueError("%r is not a coroutine or a Deferred" % (coro,))
+@@ -1381,7 +1381,7 @@ class _CancellationStatus(object):
+ 
+ 
+ @failure._extraneous
+-def _inlineCallbacks(result, g, status):
++def _inlineCallbacks(result, g, status, func_name=None, count=0):
+     """
+     Carry out the work of L{inlineCallbacks}.
+ 
+@@ -1464,6 +1464,7 @@ def _inlineCallbacks(result, g, status):
+             status.deferred.errback()
+             return
+ 
++        count += 1
+         if isinstance(result, Deferred):
+             # a deferred was yielded, get the result.
+             def gotResult(r):
+@@ -1472,8 +1473,10 @@ def _inlineCallbacks(result, g, status):
+                     waiting[1] = r
+                 else:
+                     # We are not waiting for deferred result any more
+-                    _inlineCallbacks(r, g, status)
++                    _inlineCallbacks(r, g, status, func_name, count)
+ 
++            if func_name:
++                gotResult.__name__ = "gotResult_%s_%s" % (func_name, count)
+             result.addBoth(gotResult)
+             if waiting[0]:
+                 # Haven't called back yet, set flag so that we get reinvoked
+@@ -1493,7 +1496,7 @@ def _inlineCallbacks(result, g, status):
+ 
+ 
+ 
+-def _cancellableInlineCallbacks(g):
++def _cancellableInlineCallbacks(g, func_name):
+     """
+     Make an C{@}L{inlineCallbacks} cancellable.
+ 
+@@ -1526,7 +1529,7 @@ def _cancellableInlineCallbacks(g):
+         awaited = status.waitingOn
+         awaited.cancel()
+         return status.deferred
+-    _inlineCallbacks(None, g, status)
++    _inlineCallbacks(None, g, status, func_name)
+     return deferred
+ 
+ 
+@@ -1610,7 +1613,7 @@ def inlineCallbacks(f):
+             raise TypeError(
+                 "inlineCallbacks requires %r to produce a generator; "
+                 "instead got %r" % (f, gen))
+-        return _cancellableInlineCallbacks(gen)
++        return _cancellableInlineCallbacks(gen, f.__name__)
+     return unwindGenerator
+ 
+ 
+-- 
+2.30.2
+
