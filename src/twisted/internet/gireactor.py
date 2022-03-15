@@ -60,8 +60,6 @@ def _oldGiInit():
 
     global GLib
     from gi.repository import GLib
-    if getattr(GLib, "threads_init", None) is not None:
-        GLib.threads_init()
 
     _glibbase.ensureNotImported([], "",
                                 preventImports=_PYGTK_MODULES)
@@ -75,15 +73,14 @@ else:
     # Newer version of gi, so we can try to initialize compatibility layer; if
     # real pygtk was already imported we'll get ImportError at this point
     # rather than segfault, so unconditional import is fine.
-    import gi.pygtkcompat
-    gi.pygtkcompat.enable()
+
+    import pygtkcompat
+    pygtkcompat.enable()
     # At this point importing gobject will get you gi version, and importing
     # e.g. gtk will either fail in non-segfaulty way or use gi version if user
     # does gi.pygtkcompat.enable_gtk(). So, no need to prevent imports of
     # old school pygtk modules.
     from gi.repository import GLib
-    if getattr(GLib, "threads_init", None) is not None:
-        GLib.threads_init()
 
 
 

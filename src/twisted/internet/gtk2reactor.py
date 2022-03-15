@@ -43,21 +43,16 @@ except (ImportError, AttributeError):
     pass # maybe we're using pygtk before this hack existed.
 
 import gobject
-if hasattr(gobject, "threads_init"):
-    # recent versions of python-gtk expose this. python-gtk=2.4.1
-    # (wrapping glib-2.4.7) does. python-gtk=2.0.0 (wrapping
-    # glib-2.2.3) does not.
-    gobject.threads_init()
-
+from gi.repository import GLib
 
 
 class Gtk2Reactor(_glibbase.GlibReactorBase):
     """
     PyGTK+ 2 event loop reactor.
     """
-    _POLL_DISCONNECTED = gobject.IO_HUP | gobject.IO_ERR | gobject.IO_NVAL
-    _POLL_IN = gobject.IO_IN
-    _POLL_OUT = gobject.IO_OUT
+    _POLL_DISCONNECTED = GLib.IO_HUP | GLib.IO_ERR | GLib.IO_NVAL
+    _POLL_IN = GLib.IO_IN
+    _POLL_OUT = GLib.IO_OUT
 
     # glib's iochannel sources won't tell us about any events that we haven't
     # asked for, even if those events aren't sensible inputs to the poll()
