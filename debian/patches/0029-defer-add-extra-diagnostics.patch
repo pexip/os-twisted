@@ -37,7 +37,7 @@ index 96fa324..2782ad6 100644
          if isinstance(result, Deferred):
              # a deferred was yielded, get the result.
              def gotResult(r):
-@@ -1472,8 +1473,10 @@ def _inlineCallbacks(result, g, status):
+@@ -1472,8 +1473,11 @@ def _inlineCallbacks(result, g, status):
                      waiting[1] = r
                  else:
                      # We are not waiting for deferred result any more
@@ -46,10 +46,11 @@ index 96fa324..2782ad6 100644
  
 +            if func_name:
 +                gotResult.__name__ = "gotResult_%s_%s" % (func_name, count)
++                gotResult.__qualname__ = "gotResult_%s_%s" % (func_name, count)
              result.addBoth(gotResult)
              if waiting[0]:
                  # Haven't called back yet, set flag so that we get reinvoked
-@@ -1493,7 +1496,7 @@ def _inlineCallbacks(result, g, status):
+@@ -1493,7 +1497,7 @@ def _inlineCallbacks(result, g, status):
  
  
  
@@ -58,7 +59,7 @@ index 96fa324..2782ad6 100644
      """
      Make an C{@}L{inlineCallbacks} cancellable.
  
-@@ -1526,7 +1529,7 @@ def _cancellableInlineCallbacks(g):
+@@ -1526,7 +1530,7 @@ def _cancellableInlineCallbacks(g):
          awaited = status.waitingOn
          awaited.cancel()
          return status.deferred
@@ -67,7 +68,7 @@ index 96fa324..2782ad6 100644
      return deferred
  
  
-@@ -1610,7 +1613,7 @@ def inlineCallbacks(f):
+@@ -1610,7 +1614,7 @@ def inlineCallbacks(f):
              raise TypeError(
                  "inlineCallbacks requires %r to produce a generator; "
                  "instead got %r" % (f, gen))
