@@ -34,3 +34,4 @@
 0027-twisted-issue-9462.patch
 0028-deprecate-twisted.internet.defer.returnValue.patch
 0029-defer-add-extra-diagnostics.patch
+0030-fix-pygideprecationwarnings.patch
