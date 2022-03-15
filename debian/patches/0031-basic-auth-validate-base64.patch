@@ -1,0 +1,27 @@
+diff --git a/src/twisted/web/_auth/basic.py b/src/twisted/web/_auth/basic.py
+index d539457..1ca06bb 100644
+--- a/src/twisted/web/_auth/basic.py
++++ b/src/twisted/web/_auth/basic.py
+@@ -12,7 +12,7 @@ HTTP BASIC authentication.
+ 
+ from __future__ import division, absolute_import
+ 
+-import binascii
++import base64
+ 
+ from zope.interface import implementer
+ 
+@@ -50,8 +50,11 @@ class BasicCredentialFactory(object):
+         L{credentials.UsernamePassword} instance.
+         """
+         try:
+-            creds = binascii.a2b_base64(response + b'===')
+-        except binascii.Error:
++            creds = base64.b64decode(
++                response + b"=" * (-len(response) % 4),
++                validate=True
++            )
++        except ValueError:
+             raise error.LoginFailed('Invalid credentials')
+ 
+         creds = creds.split(b':', 1)

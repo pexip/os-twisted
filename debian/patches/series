@@ -35,3 +35,4 @@
 0028-deprecate-twisted.internet.defer.returnValue.patch
 0029-defer-add-extra-diagnostics.patch
 0030-fix-pygideprecationwarnings.patch
+0031-basic-auth-validate-base64.patch
