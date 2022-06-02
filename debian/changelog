@@ -1,6 +1,7 @@
 twisted (20.3.0-7pexip11) pexip; urgency=medium
 
   * Initial bullseye build
+  * Remove all python2 packaging.
 
  -- Mark Hymers <mark.hymers@pexip.com>  Thu, 02 Jun 2022 14:43:00 +0100
 
