@@ -1,3 +1,9 @@
+twisted (20.3.0-7pexip11) pexip; urgency=medium
+
+  * Initial bullseye build
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Thu, 02 Jun 2022 14:43:00 +0100
+
 twisted (20.3.0-7pexip10) pexip; urgency=medium
 
   * twisted.web.guard.BasicCredentialFactory: validate base64 characters
