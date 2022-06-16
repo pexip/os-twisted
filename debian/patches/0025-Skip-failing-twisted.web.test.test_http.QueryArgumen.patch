@@ -10,28 +10,26 @@ https://github.com/twisted/twisted/pull/1523
 
 --- a/src/twisted/web/test/test_http.py
 +++ b/src/twisted/web/test/test_http.py
-@@ -11,6 +11,7 @@
+@@ -10,11 +10,14 @@
+ import base64
  import calendar
- import cgi
  import random
 +import sys
  
  import hamcrest
  
-@@ -19,6 +20,8 @@
- except ImportError:
-     from urllib.parse import urlparse, urlunsplit, clear_cache
+ from urllib.parse import urlparse, urlunsplit, clear_cache, parse_qs
  
 +from unittest import skipIf
 +
  from io import BytesIO
  from itertools import cycle
  from zope.interface import (
-@@ -2371,6 +2374,7 @@
+@@ -2340,6 +2343,7 @@
  
  
  class QueryArgumentsTests(unittest.TestCase):
 +    @skipIf(sys.version_info >= (3, 6), "newer py3.6 parse_qs treat ; differently")
      def testParseqs(self):
          self.assertEqual(
-             cgi.parse_qs(b"a=b&d=c;+=f"),
+             parse_qs(b"a=b&d=c;+=f"),

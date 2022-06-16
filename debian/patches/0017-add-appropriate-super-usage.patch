@@ -1,8 +1,6 @@
-diff --git a/src/twisted/web/client.py b/src/twisted/web/client.py
-index 7e4642e..d952cd6 100644
 --- a/src/twisted/web/client.py
 +++ b/src/twisted/web/client.py
-@@ -404,7 +404,7 @@ class HTTPClientFactory(protocol.ClientFactory):
+@@ -403,7 +403,7 @@
          self.path = uri.originForm
  
      def buildProtocol(self, addr):
@@ -11,11 +9,9 @@ index 7e4642e..d952cd6 100644
          p.followRedirect = self.followRedirect
          p.afterFoundGet = self.afterFoundGet
          if self.timeout:
-diff --git a/src/twisted/web/http.py b/src/twisted/web/http.py
-index b7afa8b..94d3523 100644
 --- a/src/twisted/web/http.py
 +++ b/src/twisted/web/http.py
-@@ -3107,7 +3107,7 @@ class HTTPFactory(protocol.ServerFactory):
+@@ -3107,7 +3107,7 @@
  
  
      def buildProtocol(self, addr):
