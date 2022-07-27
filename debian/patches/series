@@ -22,6 +22,29 @@
 0023-Merge-9801-rodrigc-cgi-Change-import-of-cgi.parse_qs.patch
 0024-fixed-corrupted-iqmp-value-in-test-RSA-key.patch
 0025-Skip-failing-twisted.web.test.test_http.QueryArgumen.patch
+CVE-2022-21712-1.patch
+CVE-2022-21712-2.patch
+CVE-2022-21712-3.patch
+CVE-2022-21712-4.patch
+CVE-2022-21712-5.patch
+CVE-2022-21712-6.patch
+CVE-2022-21712-7.patch
+CVE-2022-21712-8.patch
+CVE-2022-21712-9.patch
+CVE-2022-21712-10.patch
+CVE-2022-21716-1.patch
+CVE-2022-21716-2.patch
+CVE-2022-21716-3.patch
+CVE-2022-24801-1.patch
+CVE-2022-24801-2.patch
+CVE-2022-24801-3.patch
+CVE-2022-24801-4.patch
+CVE-2022-24801-5.patch
+CVE-2022-24801-6.patch
+CVE-2022-24801-7.patch
+CVE-2022-24801-8.patch
+CVE-2022-24801-9.patch
+Tests-remove-spurious-test-for-illegal-whitespace-in-xmlns.patch
 
 # Pexip extras
 0016-change-iterkeys-to-keys.patch
@@ -36,3 +59,4 @@
 0029-defer-add-extra-diagnostics.patch
 0030-fix-pygideprecationwarnings.patch
 0031-basic-auth-validate-base64.patch
+
