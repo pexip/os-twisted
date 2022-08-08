@@ -7,7 +7,6 @@ XSBC-Pexip-Original-Uploaders: Matthias Klose <doko@debian.org>
 Build-Depends: debhelper-compat (= 12),
                dh-python,
                patch,
-               python2-doc,
                python3-all-dev,
                python3-all-dbg,
                python3-hamcrest,
