@@ -27,7 +27,6 @@
 0016-change-iterkeys-to-keys.patch
 0017-add-appropriate-super-usage.patch
 0019-trial-cleanup-consistency.patch
-0020-py2-web-resource-class-fix.diff
 0021-task-coop-generator-fix.diff
 0026-web-resource-upgrade-putChild-type-warning-to-except.patch
 0027-twisted-issue-9462.patch
