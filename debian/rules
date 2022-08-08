@@ -3,15 +3,13 @@
 SHELL = /bin/bash
 
 # all versions
-PYVERS	:= $(shell pyversions -vs)
-VER	:= $(shell /usr/bin/python2 -c 'import sys; print sys.version[:3]')
 PY3VERS	:= $(shell py3versions -vs)
 VER3	:= $(shell /usr/bin/python3 -c 'import sys; print(sys.version[:3])')
 DEBVERS := $(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
 
 twversion := $(subst twisted-,,$(notdir $(CURDIR)))
 
-include /usr/share/python/python.mk
+include /usr/share/python3/python.mk
 
 with_docs=
 ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
@@ -22,11 +20,7 @@ build: build-stamp
 build-arch: build-stamp
 build-indep: build-stamp
 build-indep: build-stamp build-doc
-build-stamp: $(PYVERS:%=build-python%) $(PY3VERS:%=build3-python%)
-	touch $@
-build-python%:
-	python$* setup.py build
-	python$*-dbg setup.py build
+build-stamp: $(PY3VERS:%=build3-python%)
 	touch $@
 
 build3-python%:
@@ -41,7 +35,7 @@ ifeq ($(with_docs),yes)
 endif
 
 clean:
-	rm -rf *-stamp build-python* build tmp
+	rm -rf *-stamp build tmp
 	rm -rf docs/_build build-doc
 	rm -rf build3-python*
 	rm -rf apidocs py3
@@ -52,53 +46,12 @@ clean:
 	find . -name "*.pyc" |xargs -r rm
 	dh_clean
 
-install: build-stamp install-prereq $(PYVERS:%=install-python%) $(PY3VERS:%=install3-python%) install-nover
+install: build-stamp install-prereq $(PY3VERS:%=install3-python%) install-nover
 
 install-prereq: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_prep
-
-install-python%: install-prereq
-	: # python-twisted-core
-	python$* setup.py install --root=debian/python-twisted-core --install-layout=deb
-
-	-find debian/python-twisted-core -name '*.py[co]' | xargs rm -f
-	rm -rf debian/python-twisted-core$(call py_libdir,$*)/twisted/topfiles
-	rm -rf debian/python-twisted-core$(call py_libdir,$*)/Twisted-$(twversion).egg-info
-
-	python$* setup.py install --root=tmp --install-layout=deb
-	cp -r tmp$(call py_libdir,$*)/Twisted-*.egg-info debian/python-twisted-core$(call py_libdir,$*)/
-
-	find debian/python-twisted-core -name 'topfiles' -type d | xargs -r rm -rf
-
-	: # python-twisted
-	mkdir -p debian/python-twisted/$(call py_libdir,$*)
-
-	: # python-twisted-bin
-	dh_movefiles -ppython-twisted-bin \
-	  --sourcedir=debian/python-twisted-core \
-	    $(call py_libdir,$*)/twisted/python/_sendmsg.so \
-	    $(call py_libdir,$*)/twisted/test/raiser.so
-
-	: # python-twisted-bin-dbg
-	python$*-dbg setup.py install --root=debian/python-twisted-bin-dbg --no-compile --install-layout=deb
-	find debian/python-twisted-bin-dbg ! -type d ! -name '*_d.so' | xargs rm -f
-	find debian/python-twisted-bin-dbg -depth -empty -exec rmdir {} \;
-
-	: # Replace all '#!' calls to python with /usr/bin/python2
-	: # and make them executable
-	for i in `find debian/python-twisted-* -mindepth 3 -type f`; do \
-	  sed '1s,#!.*python[^ ]*\(.*\),#! /usr/bin/python2\1,' \
-		$$i > $$i.temp; \
-	  if cmp --quiet $$i $$i.temp; then \
-	    rm -f $$i.temp; \
-	  else \
-	    mv -f $$i.temp $$i; \
-	    chmod 755 $$i; \
-	    echo "fixed interpreter: $$i"; \
-	  fi; \
-	done
 
 install3-python%: install-prereq
 	: # python3-twisted $*
@@ -134,22 +87,6 @@ install3-python%: install-prereq
 	find debian/python3-twisted-bin-dbg -depth -empty -exec rmdir {} \;
 
 install-nover:
-	: # python man pages
-	mkdir -p debian/python-twisted-core/usr/share/man/man1
-	for i in \
-	  docs/core/man/{manhole,pyhtmlizer,tap2deb,tap2rpm,trial,twistd}.1 \
-	  docs/conch/man/{cftp,ckeygen,conch,tkconch}.1 \
-	  docs/mail/man/mailmail.1; \
-	do \
-	  cp $$i debian/python-twisted-core/usr/share/man/man1/.; \
-	done
-	mv debian/python-twisted-core/usr/bin/cftp \
-		debian/python-twisted-core/usr/bin/conchftp
-	mv debian/python-twisted-core/usr/share/man/man1/cftp.1 \
-		debian/python-twisted-core/usr/share/man/man1/conchftp.1
-	sed -i '/^\.Nm /s/cftp/conchftp/;s/CFTP/CONCHFTP/' \
-		debian/python-twisted-core/usr/share/man/man1/conchftp.1
-
 	: # python3 man pages
 	for i in debian/python3-twisted/usr/bin/*; do \
 	  mv $$i $${i}3; \
@@ -177,10 +114,6 @@ ifeq ($(with_docs),yes)
 	dh_sphinxdoc -ptwisted-doc
 endif
 
-	rm -rf debian/python-twisted-runner-dbg/usr/share/doc/python-twisted-runner-dbg
-	ln -s python-twisted-runner \
-	    debian/python-twisted-runner-dbg/usr/share/doc/python-twisted-runner-dbg
-
 ifeq ($(with_docs),yes)
 	-cp -ua apidocs debian/twisted-doc/usr/share/doc/twisted-doc/
 	# Replace links to Twisted website API doc by links to the local doc. We
@@ -198,18 +131,11 @@ endif
 	dh_compress -i -X.py
 	dh_fixperms -i
 	dh_lintian -i
-	dh_python2 -i -X hamcrest
 	dh_python3 -i -X hamcrest
 	# post-process .substvars until #806316 is fixed and -X starts working
-	sed -i 's/ python3*-hamcrest,//' debian/python-twisted-core.substvars debian/python3-twisted.substvars
+	sed -i 's/ python3*-hamcrest,//' debian/python3-twisted.substvars
 	dh_installdeb -i
-	dh_gencontrol -ppython-twisted-core -ppython-twisted-mail \
-	    -ppython-twisted-names -ppython-twisted-news -ppython-twisted-web \
-	    -ppython-twisted-runner -ppython-twisted-runner-dbg \
-            -ppython-twisted-words -ptwisted-doc -ppython-twisted \
-	    -ppython3-twisted
-	: # Add the epoch to python-twisted-conch, for upgrades
-	dh_gencontrol -ppython-twisted-conch -- -v1:$(DEBVERS)
+	dh_gencontrol -ptwisted-doc -ppython3-twisted
 	dh_md5sums -i
 	dh_builddeb -i
 
@@ -221,11 +147,6 @@ binary-arch: build-arch install
 	dh_installdocs -a
 	dh_installmenu -a
 
-	dh_strip -ppython-twisted-bin --dbg-package=python-twisted-bin-dbg
-	rm -rf debian/python-twisted-bin-dbg/usr/share/doc/python-twisted-bin-dbg
-	ln -s python-twisted-bin \
-	    debian/python-twisted-bin-dbg/usr/share/doc/python-twisted-bin-dbg
-
 	dh_strip -ppython3-twisted-bin --dbg-package=python3-twisted-bin-dbg
 	rm -rf debian/python3-twisted-bin-dbg/usr/share/doc/python3-twisted-bin-dbg
 	ln -s python3-twisted-bin \
@@ -233,7 +154,6 @@ binary-arch: build-arch install
 
 	dh_compress -a -X.py
 	dh_fixperms -a
-	dh_python2 -a
 	dh_python3 -a
 	dh_installdeb -a
 	dh_shlibdeps -a
