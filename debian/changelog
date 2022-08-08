@@ -1,3 +1,14 @@
+twisted (20.3.0-7+deb11u1pexip1) pexip; urgency=medium
+
+  * New upstream release: Fixes CVE-2022-21712, CVE-2022-21716,
+    CVE-2022-24801.
+  * Remove python 2 packages
+  * Revert 0018-py2-force-use-new-style-classes.patch (py2 compatibility)
+  * Revert 0020-py2-web-resource-class-fix.diff (py2 compatibility)
+  * Re-include upstream patches which assume python3 compatibility
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Mon, 08 Aug 2022 13:52:41 +0100
+
 twisted (20.3.0-7+deb11u1) bullseye; urgency=medium
 
   * Team upload.
