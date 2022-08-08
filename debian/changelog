@@ -1,3 +1,30 @@
+twisted (20.3.0-7+deb11u1) bullseye; urgency=medium
+
+  * Team upload.
+  * CVE-2022-21712: Information disclosure results in leaking of HTTP cookie
+    and authorization headers when following cross origin redirects
+    - debian/patches/CVE-2022-21712-*.patch: Ensure sensitive HTTP headers are
+      removed when forming requests, in src/twisted/web/client.py,
+      src/twisted/web/test/test_agent.py and src/twisted/web/iweb.py.
+    - Thanks Canonical for backporting the patches.
+  * CVE-2022-21716: Parsing of SSH version identifier field during an SSH
+    handshake can result in a denial of service when excessively large packets
+    are received
+    - debian/patches/CVE-2022-21716-*.patch: Ensure that length of received
+      handshake buffer is checked, prior to processing version string in
+      src/twisted/conch/ssh/transport.py and
+      src/twisted/conch/test/test_transport.py
+    - Thanks Canonical for backporting the patches.
+  * CVE-2022-24801: Correct several defects in HTTP request parsing that could
+    permit HTTP request smuggling: disallow signed Content-Length headers,
+    forbid illegal characters in chunked extensions, forbid 0x prefix to chunk
+    lengths, and only strip space and horizontal tab from header values.
+    - debian/patches/CVE-2022-24801-*.patch
+  * Patch: remove spurious test for illegal whitespace in xmlns, to allow
+    tests to pass, again.
+
+ -- Stefano Rivera <stefanor@debian.org>  Thu, 05 May 2022 09:59:26 -0400
+
 twisted (20.3.0-7pexip10) pexip; urgency=medium
 
   * twisted.web.guard.BasicCredentialFactory: validate base64 characters
