@@ -7,11 +7,9 @@ with OpenSSL 1.1.1 no ValueError is raised
  src/twisted/test/test_sslverify.py | 15 ---------------
  1 file changed, 15 deletions(-)
 
-diff --git a/src/twisted/test/test_sslverify.py b/src/twisted/test/test_sslverify.py
-index d012d5b..fc3bebc 100644
 --- a/src/twisted/test/test_sslverify.py
 +++ b/src/twisted/test/test_sslverify.py
-@@ -898,21 +898,6 @@ class OpenSSLOptionsTests(OpenSSLOptionsTestsMixin, unittest.TestCase):
+@@ -900,21 +900,6 @@
          self.assertEqual(opts._cipherString.encode('ascii'), ctx._cipherList)
  
  

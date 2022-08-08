@@ -7,11 +7,9 @@ See: https://github.com/openssl/openssl/issues/7725
  src/twisted/test/test_sslverify.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/twisted/test/test_sslverify.py b/src/twisted/test/test_sslverify.py
-index fb6b01b..d012d5b 100644
 --- a/src/twisted/test/test_sslverify.py
 +++ b/src/twisted/test/test_sslverify.py
-@@ -2706,7 +2706,7 @@ class ExpandCipherStringTests(unittest.TestCase):
+@@ -2730,7 +2730,7 @@
      if skipSSL:
          skip = skipSSL
  

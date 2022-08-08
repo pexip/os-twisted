@@ -12,11 +12,9 @@ Bug-Debian https://bugs.debian.org/772629
  src/twisted/web/test/test_web.py | 16 ++++++++--------
  2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/src/twisted/web/http.py b/src/twisted/web/http.py
-index 2599470..6a27bca 100644
 --- a/src/twisted/web/http.py
 +++ b/src/twisted/web/http.py
-@@ -2631,7 +2631,7 @@ def combinedLogFormatter(timestamp, request):
+@@ -2731,7 +2731,7 @@
      referrer = _escape(request.getHeader(b"referer") or b"-")
      agent = _escape(request.getHeader(b"user-agent") or b"-")
      line = (
@@ -25,11 +23,9 @@ index 2599470..6a27bca 100644
          u'%(code)d %(length)s "%(referrer)s" "%(agent)s"' % dict(
              ip=_escape(ip),
              timestamp=timestamp,
-diff --git a/src/twisted/web/test/test_web.py b/src/twisted/web/test/test_web.py
-index 387e830..539d099 100644
 --- a/src/twisted/web/test/test_web.py
 +++ b/src/twisted/web/test/test_web.py
-@@ -1438,7 +1438,7 @@ class AccessLogTestsMixin(object):
+@@ -1530,7 +1530,7 @@
  
          self.assertEqual(
              # Client IP
@@ -38,7 +34,7 @@ index 387e830..539d099 100644
              # Some blanks we never fill in
              b'- - '
              # The current time (circa 1234567890)
-@@ -1531,7 +1531,7 @@ class CombinedLogFormatterTests(unittest.TestCase):
+@@ -1623,7 +1623,7 @@
  
          line = http.combinedLogFormatter(timestamp, request)
          self.assertEqual(
@@ -47,7 +43,7 @@ index 387e830..539d099 100644
              u'"POS\\x81 /dummy HTTP/1.0" 123 - "evil \\x83" "evil \\x84"',
              line)
  
-@@ -1663,7 +1663,7 @@ class LogEscapingTests(unittest.TestCase):
+@@ -1755,7 +1755,7 @@
          self.site._logDateTime = "[%02d/%3s/%4d:%02d:%02d:%02d +0000]" % (
              25, 'Oct', 2004, 12, 31, 59)
          self.assertLogs(
@@ -56,7 +52,7 @@ index 387e830..539d099 100644
              b'"GET /dummy HTTP/1.0" 123 - "-" "-"\n')
  
  
-@@ -1675,7 +1675,7 @@ class LogEscapingTests(unittest.TestCase):
+@@ -1767,7 +1767,7 @@
              25, 'Oct', 2004, 12, 31, 59)
          self.request.method = b'G"T'
          self.assertLogs(
@@ -65,7 +61,7 @@ index 387e830..539d099 100644
              b'"G\\"T /dummy HTTP/1.0" 123 - "-" "-"\n')
  
  
-@@ -1687,7 +1687,7 @@ class LogEscapingTests(unittest.TestCase):
+@@ -1779,7 +1779,7 @@
              25, 'Oct', 2004, 12, 31, 59)
          self.request.uri = b'/dummy"withquote'
          self.assertLogs(
@@ -74,7 +70,7 @@ index 387e830..539d099 100644
              b'"GET /dummy\\"withquote HTTP/1.0" 123 - "-" "-"\n')
  
  
-@@ -1699,7 +1699,7 @@ class LogEscapingTests(unittest.TestCase):
+@@ -1791,7 +1791,7 @@
              25, 'Oct', 2004, 12, 31, 59)
          self.request.clientproto = b'HT"P/1.0'
          self.assertLogs(
@@ -83,7 +79,7 @@ index 387e830..539d099 100644
              b'"GET /dummy HT\\"P/1.0" 123 - "-" "-"\n')
  
  
-@@ -1714,7 +1714,7 @@ class LogEscapingTests(unittest.TestCase):
+@@ -1806,7 +1806,7 @@
              b'referer',
              b'http://malicious" ".website.invalid')
          self.assertLogs(
@@ -92,7 +88,7 @@ index 387e830..539d099 100644
              b'"GET /dummy HTTP/1.0" 123 - '
              b'"http://malicious\\" \\".website.invalid" "-"\n')
  
-@@ -1729,7 +1729,7 @@ class LogEscapingTests(unittest.TestCase):
+@@ -1821,7 +1821,7 @@
          self.request.requestHeaders.addRawHeader(b'user-agent',
                                                   b'Malicious Web" Evil')
          self.assertLogs(
