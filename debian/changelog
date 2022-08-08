@@ -1,4 +1,4 @@
-twisted (20.3.0-7+deb11u1pexip1) pexip; urgency=medium
+twisted (20.3.0-7+deb11u1pexip1~deb10) pexip; urgency=medium
 
   * New upstream release: Fixes CVE-2022-21712, CVE-2022-21716,
     CVE-2022-24801.
