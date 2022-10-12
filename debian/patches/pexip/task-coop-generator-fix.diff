@@ -1,11 +1,11 @@
 Fix task.CooperativeTask in Python 3 due to change in StopIteration behaviour
 --- a/src/twisted/internet/task.py
 +++ b/src/twisted/internet/task.py
-@@ -517,8 +517,11 @@
+@@ -526,8 +526,11 @@
              result = next(self._iterator)
          except StopIteration:
              self._completeWith(TaskDone(), self._iterator)
--        except:
+-        except BaseException:
 -            self._completeWith(TaskFailed(), Failure())
 +        except BaseException as err:
 +            if str(err) == "generator raised StopIteration":
@@ -13,5 +13,5 @@ Fix task.CooperativeTask in Python 3 due to change in StopIteration behaviour
 +            else:
 +                self._completeWith(TaskFailed(), Failure())
          else:
-             if isinstance(result, defer.Deferred):
+             if isinstance(result, Deferred):
                  self.pause()

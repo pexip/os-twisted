@@ -2,7 +2,7 @@ https://twistedmatrix.com/trac/ticket/9462#comment:16
 
 --- a/src/twisted/protocols/tls.py
 +++ b/src/twisted/protocols/tls.py
-@@ -335,7 +335,9 @@
+@@ -334,7 +334,9 @@
          Initiate, or reply to, the shutdown handshake of the TLS layer.
          """
          try:

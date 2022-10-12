@@ -8,19 +8,22 @@ Subject: [PATCH] twisted.internet.defer.returnValue: deprecate in favour of
  src/twisted/internet/defer.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/twisted/internet/defer.py b/src/twisted/internet/defer.py
-index 96fa324..20fec4d 100644
 --- a/src/twisted/internet/defer.py
 +++ b/src/twisted/internet/defer.py
-@@ -1345,7 +1345,7 @@ class _DefGen_Return(BaseException):
+@@ -1578,6 +1578,7 @@
          self.value = value
  
  
--
 +@deprecated(Version('Twisted', 20, 3, 0), replacement='return')
- def returnValue(val):
+ def returnValue(val: object) -> NoReturn:
      """
      Return val from a L{inlineCallbacks} generator.
--- 
-2.30.2
-
+@@ -1771,7 +1772,7 @@
+     gen: Union[
+         Generator["Deferred[_T]", object, _T],
+         Coroutine["Deferred[_T]", object, _T],
+-    ]
++    ],
+ ) -> Deferred[_T]:
+     """
+     Make an C{@}L{inlineCallbacks} cancellable.
