@@ -1,0 +1,22 @@
+--- a/src/twisted/web/_auth/basic.py
++++ b/src/twisted/web/_auth/basic.py
+@@ -11,7 +11,7 @@
+ """
+ 
+ 
+-import binascii
++import base64
+ 
+ from zope.interface import implementer
+ 
+@@ -47,7 +47,9 @@
+         L{credentials.UsernamePassword} instance.
+         """
+         try:
+-            creds = binascii.a2b_base64(response + b"===")
++            creds = binascii.a2b_base64(
++                response + b"=" * (-len(response) % 4), validate=True,
++            )
+         except binascii.Error:
+             raise error.LoginFailed("Invalid credentials")
+ 

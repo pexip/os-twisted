@@ -1,0 +1,78 @@
+From 09b3ca137ffd389daac633d206f86466822a4369 Mon Sep 17 00:00:00 2001
+From: Will Miller <will.miller@pexip.com>
+Date: Tue, 15 Mar 2022 14:41:33 +0000
+Subject: [PATCH] internet/glib: fix PyGIDeprecationWarnings
+
+Update GLib API calls to their non-deprecated invocations.
+---
+ src/twisted/internet/_glibbase.py   |  3 +--
+ src/twisted/internet/gireactor.py   |  9 +++------
+ src/twisted/internet/gtk2reactor.py | 13 ++++---------
+ 3 files changed, 8 insertions(+), 17 deletions(-)
+
+--- a/src/twisted/internet/_glibbase.py
++++ b/src/twisted/internet/_glibbase.py
+@@ -153,7 +153,7 @@
+             fileno = source
+             wrapper = callback
+         return self._glib.io_add_watch(
+-            fileno, condition, wrapper, priority=self._glib.PRIORITY_DEFAULT_IDLE
++            fileno, self._glib.PRIORITY_DEFAULT_IDLE, condition, wrapper
+         )
+ 
+     def _ioEventCallback(self, source, condition):
+--- a/src/twisted/internet/gireactor.py
++++ b/src/twisted/internet/gireactor.py
+@@ -21,7 +21,7 @@
+ """
+ 
+ 
+-import gi.pygtkcompat  # type: ignore[import]
++import pygtkcompat  # type: ignore[import]
+ from gi.repository import GLib  # type: ignore[import]
+ 
+ from twisted.internet import _glibbase
+@@ -34,13 +34,11 @@
+ # Newer version of gi, so we can try to initialize compatibility layer; if
+ # real pygtk was already imported we'll get ImportError at this point
+ # rather than segfault, so unconditional import is fine.
+-gi.pygtkcompat.enable()
++pygtkcompat.enable()
+ # At this point importing gobject will get you gi version, and importing
+ # e.g. gtk will either fail in non-segfaulty way or use gi version if user
+ # does gi.pygtkcompat.enable_gtk(). So, no need to prevent imports of
+ # old school pygtk modules.
+-if getattr(GLib, "threads_init", None) is not None:
+-    GLib.threads_init()
+ 
+ 
+ class GIReactor(_glibbase.GlibReactorBase):
+--- a/src/twisted/internet/gtk2reactor.py
++++ b/src/twisted/internet/gtk2reactor.py
+@@ -44,12 +44,7 @@
+     pass  # maybe we're using pygtk before this hack existed.
+ 
+ import gobject  # type: ignore[import]
+-
+-if hasattr(gobject, "threads_init"):
+-    # recent versions of python-gtk expose this. python-gtk=2.4.1
+-    # (wrapping glib-2.4.7) does. python-gtk=2.0.0 (wrapping
+-    # glib-2.2.3) does not.
+-    gobject.threads_init()
++from gi.repository import GLib  # type: ignore[import]
+ 
+ 
+ class Gtk2Reactor(_glibbase.GlibReactorBase):
+@@ -57,9 +52,9 @@
+     PyGTK+ 2 event loop reactor.
+     """
+ 
+-    _POLL_DISCONNECTED = gobject.IO_HUP | gobject.IO_ERR | gobject.IO_NVAL
+-    _POLL_IN = gobject.IO_IN
+-    _POLL_OUT = gobject.IO_OUT
++    _POLL_DISCONNECTED = GLib.IO_HUP | GLib.IO_ERR | GLib.IO_NVAL
++    _POLL_IN = GLib.IO_IN
++    _POLL_OUT = GLib.IO_OUT
+ 
+     # glib's iochannel sources won't tell us about any events that we haven't
+     # asked for, even if those events aren't sensible inputs to the poll()

@@ -19,15 +19,12 @@ tests/Tests-remove-spurious-test-for-illegal-whitespace-in-xmlns.patch
 debian-hacks/Drop-dependency-on-typing_extensions.patch
 
 # Pexip extras
-0016-change-iterkeys-to-keys.patch
-0017-add-appropriate-super-usage.patch
-0018-py2-force-use-new-style-classes.patch
-0019-trial-cleanup-consistency.patch
-0020-py2-web-resource-class-fix.diff
-0021-task-coop-generator-fix.diff
-0026-web-resource-upgrade-putChild-type-warning-to-except.patch
-0027-twisted-issue-9462.patch
-0028-deprecate-twisted.internet.defer.returnValue.patch
-0029-defer-add-extra-diagnostics.patch
-0030-fix-pygideprecationwarnings.patch
-0031-basic-auth-validate-base64.patch
+pexip/add-appropriate-super-usage.patch
+pexip/trial-cleanup-consistency.patch
+pexip/task-coop-generator-fix.diff
+pexip/web-resource-upgrade-putChild-type-warning-to-except.patch
+pexip/twisted-issue-9462.patch
+pexip/deprecate-twisted.internet.defer.returnValue.patch
+pexip/defer-add-extra-diagnostics.patch
+pexip/fix-pygideprecationwarnings.patch
+pexip/basic-auth-validate-base64.patch

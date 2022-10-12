@@ -2,6 +2,7 @@ twisted (22.4.0-3pexip1) pexip; urgency=medium
 
   * Don't build the docs
   * Use any version of incremental
+  * Refresh/prune pexip patches for new upstream release
 
  -- Huw Jones <huw@pexip.com>  Wed, 12 Oct 2022 10:58:24 +0100
 

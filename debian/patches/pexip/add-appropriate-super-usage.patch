@@ -1,0 +1,11 @@
+--- a/src/twisted/web/http.py
++++ b/src/twisted/web/http.py
+@@ -3236,7 +3236,7 @@
+         self._logDateTimeCall = self.reactor.callLater(1, self._updateLogDateTime)
+ 
+     def buildProtocol(self, addr):
+-        p = protocol.ServerFactory.buildProtocol(self, addr)
++        p = super(protocol.ServerFactory, self).buildProtocol(addr)
+ 
+         # This is a bit of a hack to ensure that the HTTPChannel timeouts
+         # occur on the same reactor as the one we're using here. This could

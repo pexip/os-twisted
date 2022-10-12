@@ -1,0 +1,12 @@
+--- a/src/twisted/trial/_asynctest.py
++++ b/src/twisted/trial/_asynctest.py
+@@ -154,8 +154,8 @@
+             callbackArgs=(result,),
+             errbackArgs=(result,),
+         )
+-        d.addBoth(self.deferRunCleanups, result)
+         d.addBoth(self.deferTearDown, result)
++        d.addBoth(self.deferRunCleanups, result)
+         return d
+ 
+     def _cbDeferTestMethod(self, ignored, result):
