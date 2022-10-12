@@ -12,7 +12,7 @@ export PYBUILD_DISABLE=test
 export PYBUILD_AFTER_INSTALL=rm -rf {destdir}/usr/lib/python3*/dist-packages/twisted/internet/iocpreactor/notes.txt
 
 %:
-	dh $@ --with sphinxdoc --buildsystem=pybuild
+	dh $@ --buildsystem=pybuild
 
 override_dh_clean:
 	rm -rf *-stamp build tmp
@@ -26,25 +26,7 @@ override_dh_clean:
 	dh_clean
 
 override_dh_sphinxdoc:
-ifeq (,$(findstring nodoc, $(DEB_BUILD_OPTIONS)))
-	PYTHONPATH=src python3 -m sphinx -b html -N docs/ $(CURDIR)/debian/twisted-doc/usr/share/doc/twisted-doc/html
-	dh_sphinxdoc
-	cp -a docs/core/* debian/twisted-doc/usr/share/doc/twisted-doc/
-	-find debian/twisted-doc -type d -name man | xargs rm -rf
-	# Replace all '#!' calls to python with /usr/bin/python3 and make them
-	# NON executable.
-	for i in `find debian/twisted-doc -mindepth 3 -type f`; do \
-	  sed '1s,#!.*python[^ ]*\(.*\),#! /usr/bin/python3\1,' \
-	    $${i} > $${i}.temp; \
-	  if cmp --quiet $${i} $${i}.temp; then \
-	    rm -f $${i}.temp; \
-	  else \
-	    mv -f $${i}.temp $${i}; \
-	    chmod 644 $${i}; \
-	    echo "fixed interpreter: $${i}"; \
-	  fi; \
-	done
-endif
+
 
 override_dh_auto_install:
 	dh_auto_install
@@ -65,11 +47,6 @@ override_dh_auto_install:
 	# Tune Python3 man pages.
 	for i in debian/python3-twisted/usr/bin/*; do \
 	  mv $${i} $${i}3; \
-	done
-	mkdir -p debian/python3-twisted/usr/share/man/man1
-	for i in docs/core/man/{trial,twistd}.1; do \
-	  i2=$$(basename $${i} .1)3.1; \
-	  cp -p $${i} debian/python3-twisted/usr/share/man/man1/$${i2}; \
 	done
 
 override_dh_compress:
