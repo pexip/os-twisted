@@ -14,7 +14,7 @@ Build-Depends:
  python3-constantly,
  python3-hamcrest,
  python3-hyperlink,
- python3-incremental (>= 21.3.0),
+ python3-incremental,
  python3-setuptools,
  python3-zope.interface (>= 4.4.2),
 Standards-Version: 4.6.0
