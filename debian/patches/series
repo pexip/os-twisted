@@ -59,4 +59,5 @@ Tests-remove-spurious-test-for-illegal-whitespace-in-xmlns.patch
 0029-defer-add-extra-diagnostics.patch
 0030-fix-pygideprecationwarnings.patch
 0031-basic-auth-validate-base64.patch
-
+asyncio-calllater-reset.patch
+asyncio-call-shutdown-once.patch
