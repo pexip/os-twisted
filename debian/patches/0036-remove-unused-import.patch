@@ -1,0 +1,21 @@
+From 144ebff9c3c8647bb051f5f7d8b79b115029442a Mon Sep 17 00:00:00 2001
+From: Glyph <glyph@twistedmatrix.com>
+Date: Wed, 11 May 2022 00:12:01 -0700
+Subject: [PATCH] remove unused import
+
+---
+ src/twisted/protocols/tls.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/twisted/protocols/tls.py b/src/twisted/protocols/tls.py
+index e032a1ad722..96ba314b0db 100644
+--- a/src/twisted/protocols/tls.py
++++ b/src/twisted/protocols/tls.py
+@@ -41,7 +41,6 @@
+ 
+ from OpenSSL.SSL import (
+     Connection,
+-    Context,
+     Error,
+     SysCallError,
+     WantReadError,

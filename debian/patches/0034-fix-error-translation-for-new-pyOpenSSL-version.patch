@@ -1,0 +1,24 @@
+From f9188c4ad94dec89884c29f5c587a8a921ffaf6d Mon Sep 17 00:00:00 2001
+From: Glyph <glyph@twistedmatrix.com>
+Date: Tue, 10 May 2022 23:07:44 -0700
+Subject: [PATCH] fix error translation for new pyOpenSSL version
+
+---
+ src/twisted/protocols/tls.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/twisted/protocols/tls.py b/src/twisted/protocols/tls.py
+index d2d69951fbf..a8333c46968 100644
+--- a/src/twisted/protocols/tls.py
++++ b/src/twisted/protocols/tls.py
+@@ -365,7 +365,9 @@ def _tlsShutdownFinished(self, reason):
+             # Squash an EOF in violation of the TLS protocol into
+             # ConnectionLost, so that applications which might run over
+             # multiple protocols can recognize its type.
+-            if tuple(reason.value.args[:2]) == (-1, "Unexpected EOF"):
++            errorQueue = reason.value.args[0]
++            _, _, reasonString = errorQueue[-1]
++            if reasonString.startswith("unexpected eof"):
+                 reason = Failure(CONNECTION_LOST)
+         if self._reason is None:
+             self._reason = reason

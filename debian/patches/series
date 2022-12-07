@@ -61,3 +61,7 @@ Tests-remove-spurious-test-for-illegal-whitespace-in-xmlns.patch
 0031-basic-auth-validate-base64.patch
 asyncio-calllater-reset.patch
 asyncio-call-shutdown-once.patch
+0033-pyopenssl-autonegotiate-only.patch
+0034-fix-error-translation-for-new-pyOpenSSL-version.patch
+0035-generalize-represents_eof-detection.patch
+0036-remove-unused-import.patch
