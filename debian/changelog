@@ -1,3 +1,9 @@
+twisted (20.3.0-7+deb11u1pexip4) pexip-bullseye-openssl3; urgency=medium
+
+  * Support for modern pyOpenSSL
+
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 07 Dec 2022 17:56:43 +0000
+
 twisted (20.3.0-7+deb11u1pexip3) pexip; urgency=medium
 
   * Add asyncio reactor patches
