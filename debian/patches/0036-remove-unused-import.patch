@@ -11,11 +11,12 @@ diff --git a/src/twisted/protocols/tls.py b/src/twisted/protocols/tls.py
 index e032a1ad722..96ba314b0db 100644
 --- a/src/twisted/protocols/tls.py
 +++ b/src/twisted/protocols/tls.py
-@@ -41,7 +41,6 @@
+@@ -39,7 +39,7 @@
+ from __future__ import division, absolute_import
  
- from OpenSSL.SSL import (
-     Connection,
--    Context,
-     Error,
-     SysCallError,
-     WantReadError,
+ from OpenSSL.SSL import Error, ZeroReturnError, WantReadError, SysCallError
+-from OpenSSL.SSL import Context, Connection
++from OpenSSL.SSL import Connection
+ 
+ from zope.interface import implementer, providedBy, directlyProvides
+ 

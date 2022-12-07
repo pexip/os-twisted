@@ -11,27 +11,25 @@ diff --git a/src/twisted/protocols/tls.py b/src/twisted/protocols/tls.py
 index a8333c46968..7c5b2b0f21f 100644
 --- a/src/twisted/protocols/tls.py
 +++ b/src/twisted/protocols/tls.py
-@@ -41,18 +41,11 @@
-     Connection,
-     Context,
-     Error,
--    TLSv1_METHOD,
-+    SysCallError,
-     WantReadError,
-     ZeroReturnError,
- )
+@@ -38,15 +38,8 @@
  
+ from __future__ import division, absolute_import
+ 
+-from OpenSSL.SSL import Error, ZeroReturnError, WantReadError
+-from OpenSSL.SSL import TLSv1_METHOD, Context, Connection
++from OpenSSL.SSL import Error, ZeroReturnError, WantReadError, SysCallError
++from OpenSSL.SSL import Context, Connection
+-
 -try:
 -    Connection(Context(TLSv1_METHOD), None)
 -except TypeError as e:
 -    if str(e) != "argument must be an int, or have a fileno() method.":
 -        raise
 -    raise ImportError("twisted.protocols.tls requires pyOpenSSL 0.10 or newer.")
--
- from zope.interface import directlyProvides, implementer, providedBy
  
- from twisted.internet._producer_helpers import _PullToPush
-@@ -117,6 +110,19 @@ def stopProducing(self):
+ from zope.interface import implementer, providedBy, directlyProvides
+ 
+@@ -111,6 +104,19 @@ def stopProducing(self):
          self._producer.stopProducing()
  
  
@@ -51,7 +49,7 @@ index a8333c46968..7c5b2b0f21f 100644
  @implementer(ISystemHandle, INegotiated)
  class TLSMemoryBIOProtocol(ProtocolWrapper):
      """
-@@ -365,9 +371,7 @@ def _tlsShutdownFinished(self, reason):
+@@ -367,9 +373,7 @@ def _tlsShutdownFinished(self, reason):
              # Squash an EOF in violation of the TLS protocol into
              # ConnectionLost, so that applications which might run over
              # multiple protocols can recognize its type.

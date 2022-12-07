@@ -11,11 +11,11 @@ diff --git a/src/twisted/protocols/tls.py b/src/twisted/protocols/tls.py
 index d2d69951fbf..a8333c46968 100644
 --- a/src/twisted/protocols/tls.py
 +++ b/src/twisted/protocols/tls.py
-@@ -365,7 +365,9 @@ def _tlsShutdownFinished(self, reason):
+@@ -367,7 +367,9 @@ def _tlsShutdownFinished(self, reason):
              # Squash an EOF in violation of the TLS protocol into
              # ConnectionLost, so that applications which might run over
              # multiple protocols can recognize its type.
--            if tuple(reason.value.args[:2]) == (-1, "Unexpected EOF"):
+-            if tuple(reason.value.args[:2]) == (-1, 'Unexpected EOF'):
 +            errorQueue = reason.value.args[0]
 +            _, _, reasonString = errorQueue[-1]
 +            if reasonString.startswith("unexpected eof"):
