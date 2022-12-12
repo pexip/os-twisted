@@ -65,3 +65,4 @@ asyncio-call-shutdown-once.patch
 0034-fix-error-translation-for-new-pyOpenSSL-version.patch
 0035-generalize-represents_eof-detection.patch
 0036-remove-unused-import.patch
+0037-Stop-using-deprecated-int_from_bytes-from-cryptography.patch
