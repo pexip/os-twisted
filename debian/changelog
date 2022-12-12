@@ -1,3 +1,9 @@
+twisted (20.3.0-7+deb11u1pexip5) pexip-bullseye-openssl3; urgency=medium
+
+  * Add upstream patch to use int.from_bytes
+
+ -- John-Mark Bell <jmb@pexip.com>  Mon, 12 Dec 2022 13:13:24 +0000
+
 twisted (20.3.0-7+deb11u1pexip4) pexip-bullseye-openssl3; urgency=medium
 
   * Support for modern pyOpenSSL
