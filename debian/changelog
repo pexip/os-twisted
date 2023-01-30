@@ -1,3 +1,11 @@
+twisted (22.4.0-4) unstable; urgency=medium
+
+  * Team upload.
+  * Add upstream patch for Python 3.11 (Closes: #1029579)
+  * Add upstream patch for CVE-2022-39348 (Closes: #1023359)
+
+ -- Jochen Sprickerhof <jspricke@debian.org>  Mon, 30 Jan 2023 16:12:17 +0100
+
 twisted (22.4.0-3) unstable; urgency=medium
 
   * Team upload.
