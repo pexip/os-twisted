@@ -29,7 +29,7 @@ index a8333c46968..7c5b2b0f21f 100644
  
  from zope.interface import implementer, providedBy, directlyProvides
  
-@@ -111,6 +104,19 @@ def stopProducing(self):
+@@ -111,6 +104,22 @@ def stopProducing(self):
          self._producer.stopProducing()
  
  
@@ -40,6 +40,9 @@ index a8333c46968..7c5b2b0f21f 100644
 +    reasonString: str
 +    if isinstance(exceptionObject, SysCallError):
 +        _, reasonString = exceptionObject.args
++    elif not exceptionObject.args:
++        # ZeroReturn/WantWrite/etc
++        reasonString = ""
 +    else:
 +        errorQueue = exceptionObject.args[0]
 +        _, _, reasonString = errorQueue[-1]
@@ -49,7 +52,7 @@ index a8333c46968..7c5b2b0f21f 100644
  @implementer(ISystemHandle, INegotiated)
  class TLSMemoryBIOProtocol(ProtocolWrapper):
      """
-@@ -367,9 +373,7 @@ def _tlsShutdownFinished(self, reason):
+@@ -367,9 +376,7 @@ def _tlsShutdownFinished(self, reason):
              # Squash an EOF in violation of the TLS protocol into
              # ConnectionLost, so that applications which might run over
              # multiple protocols can recognize its type.
