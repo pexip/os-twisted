@@ -1,0 +1,36 @@
+Index: os-twisted/src/twisted/protocols/tls.py
+===================================================================
+--- os-twisted.orig/src/twisted/protocols/tls.py
++++ os-twisted/src/twisted/protocols/tls.py
+@@ -117,6 +117,22 @@ class _ProducerMembrane:
+         self._producer.stopProducing()
+ 
+ 
++def _representsEOF(exceptionObject: Error) -> bool:
++    """
++    Does the given OpenSSL.SSL.Error represent an end-of-file?
++    """
++    reasonString: str
++    if isinstance(exceptionObject, SysCallError):
++        _, reasonString = exceptionObject.args
++    elif not exceptionObject.args:
++        # ZeroReturn/WantWrite/etc
++        reasonString = ""
++    else:
++        errorQueue = exceptionObject.args[0]
++        _, _, reasonString = errorQueue[-1]
++    return reasonString.casefold().startswith("unexpected eof")
++
++
+ @implementer(ISystemHandle, INegotiated)
+ class TLSMemoryBIOProtocol(ProtocolWrapper):
+     """
+@@ -367,7 +383,7 @@ class TLSMemoryBIOProtocol(ProtocolWrapp
+             # Squash an EOF in violation of the TLS protocol into
+             # ConnectionLost, so that applications which might run over
+             # multiple protocols can recognize its type.
+-            if tuple(reason.value.args[:2]) == (-1, "Unexpected EOF"):
++            if _representsEOF(reason.value):
+                 reason = Failure(CONNECTION_LOST)
+         if self._reason is None:
+             self._reason = reason

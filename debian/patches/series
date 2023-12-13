@@ -39,3 +39,4 @@ pexip/deprecate-twisted.internet.defer.returnValue.patch
 pexip/defer-add-extra-diagnostics.patch
 pexip/fix-pygideprecationwarnings.patch
 pexip/basic-auth-validate-base64.patch
+pexip/generalize-represents_eof-detection.patch
