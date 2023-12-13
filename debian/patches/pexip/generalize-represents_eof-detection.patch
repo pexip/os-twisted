@@ -2,7 +2,15 @@ Index: os-twisted/src/twisted/protocols/tls.py
 ===================================================================
 --- os-twisted.orig/src/twisted/protocols/tls.py
 +++ os-twisted/src/twisted/protocols/tls.py
-@@ -117,6 +117,22 @@ class _ProducerMembrane:
+@@ -41,6 +41,7 @@ from OpenSSL.SSL import (
+     Connection,
+     Context,
+     Error,
++    SysCallError,
+     TLSv1_METHOD,
+     WantReadError,
+     ZeroReturnError,
+@@ -117,6 +118,22 @@ class _ProducerMembrane:
          self._producer.stopProducing()
  
  
@@ -25,7 +33,7 @@ Index: os-twisted/src/twisted/protocols/tls.py
  @implementer(ISystemHandle, INegotiated)
  class TLSMemoryBIOProtocol(ProtocolWrapper):
      """
-@@ -367,7 +383,7 @@ class TLSMemoryBIOProtocol(ProtocolWrapp
+@@ -367,7 +384,7 @@ class TLSMemoryBIOProtocol(ProtocolWrapp
              # Squash an EOF in violation of the TLS protocol into
              # ConnectionLost, so that applications which might run over
              # multiple protocols can recognize its type.
