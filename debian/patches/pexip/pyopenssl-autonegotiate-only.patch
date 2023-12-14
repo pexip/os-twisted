@@ -1,0 +1,101 @@
+diff --git a/src/twisted/internet/_sslverify.py b/src/twisted/internet/_sslverify.py
+index c44ec14..3940bf6 100644
+--- a/src/twisted/internet/_sslverify.py
++++ b/src/twisted/internet/_sslverify.py
+@@ -1633,8 +1633,29 @@ class OpenSSLCertificateOptions(object):
+         return self._context
+ 
+     def _makeContext(self):
+-        ctx = self._contextFactory(self.method)
+-        ctx.set_options(self._options)
++        method = self.method
++        options = self._options
++        # Convert version-specific methods to auto-negotiate
++        if method == SSL.TLSv1_METHOD:
++            method = SSL.SSLv23_METHOD
++            for version in _getExcludedTLSProtocols(
++                TLSVersion.TLSv1_0, TLSVersion.TLSv1_1
++            ):
++                options |= _tlsDisableFlags[version]
++        elif method == SSL.TLSv1_1_METHOD:
++            method = SSL.SSLv23_METHOD
++            for version in _getExcludedTLSProtocols(
++                TLSVersion.TLSv1_1, TLSVersion.TLSv1_2
++            ):
++                options |= _tlsDisableFlags[version]
++        elif method == SSL.TLSv1_2_METHOD:
++            method = SSL.SSLv23_METHOD
++            for version in _getExcludedTLSProtocols(
++                TLSVersion.TLSv1_2, TLSVersion.TLSv1_3
++            ):
++                options |= _tlsDisableFlags[version]
++        ctx = self._contextFactory(method)
++        ctx.set_options(options)
+         ctx.set_mode(self._mode)
+ 
+         if self.certificate is not None and self.privateKey is not None:
+diff --git a/src/twisted/protocols/test/test_tls.py b/src/twisted/protocols/test/test_tls.py
+index 209e0e9..aa661e3 100644
+--- a/src/twisted/protocols/test/test_tls.py
++++ b/src/twisted/protocols/test/test_tls.py
+@@ -19,6 +19,10 @@ try:
+         Connection,
+         Context,
+         Error,
++        TLS1_VERSION,
++        TLS1_1_VERSION,
++        TLS1_2_VERSION,
++        SSLv23_METHOD,
+         TLSv1_1_METHOD,
+         TLSv1_2_METHOD,
+         TLSv1_METHOD,
+@@ -34,7 +38,9 @@
+ except ImportError:
+     # Skip the whole test module if it can't be imported.
+     skip = "pyOpenSSL 16.0.0 or newer required for twisted.protocol.tls"
++    SSLv23_METHOD = None
+     TLSv1_METHOD = TLSv1_1_METHOD = TLSv1_2_METHOD = None  # type: ignore[assignment]
++    TLS1_VERSION = TLS1_1_VERSION = TLS1_2_VERSION = 0
+ else:
+     from twisted.internet.ssl import PrivateCertificate, optionsForClientTLS
+     from twisted.test.ssl_helpers import ClientTLSContext, ServerTLSContext, certPath
+@@ -105,7 +111,16 @@ class HandshakeCallbackContextFactory:
+         Create and return an SSL context configured to use L{self._info} as the
+         info callback.
+         """
+-        context = Context(self._method)
++        context = Context(SSLv23_METHOD)
++        if self._method == TLSv1_METHOD:
++            context.set_min_proto_version(TLS1_VERSION)
++            context.set_max_proto_version(TLS1_VERSION)
++        elif self._method == TLSv1_1_METHOD:
++            context.set_min_proto_version(TLS1_1_VERSION)
++            context.set_max_proto_version(TLS1_1_VERSION)
++        elif self._method == TLSv1_2_METHOD:
++            context.set_min_proto_version(TLS1_2_VERSION)
++            context.set_max_proto_version(TLS1_2_VERSION)
+         context.set_info_callback(self._info)
+         return context
+ 
+diff --git a/src/twisted/test/ssl_helpers.py b/src/twisted/test/ssl_helpers.py
+index fdf2715..d56ab07 100644
+--- a/src/twisted/test/ssl_helpers.py
++++ b/src/twisted/test/ssl_helpers.py
+@@ -57,7 +57,16 @@ class ServerTLSContext:
+         This is done to improve the test coverage as most implementation
+         are caching the context.
+         """
+-        ctx = SSL.Context(self._method)
++        ctx = SSL.Context(SSL.SSLv23_METHOD)
++        if self._method == SSL.TLSv1_METHOD:
++            ctx.set_min_proto_version(SSL.TLS1_VERSION)
++            ctx.set_max_proto_version(SSL.TLS1_VERSION)
++        elif self._method == SSL.TLSv1_1_METHOD:
++            ctx.set_min_proto_version(SSL.TLS1_1_VERSION)
++            ctx.set_max_proto_version(SSL.TLS1_1_VERSION)
++        elif self._method == SSL.TLSv1_2_METHOD:
++            ctx.set_min_proto_version(SSL.TLS1_2_VERSION)
++            ctx.set_max_proto_version(SSL.TLS1_2_VERSION)
+         ctx.use_certificate_file(self.filename)
+         ctx.use_privatekey_file(self.filename)
+         return ctx

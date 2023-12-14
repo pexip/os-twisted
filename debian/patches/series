@@ -40,3 +40,4 @@ pexip/defer-add-extra-diagnostics.patch
 pexip/fix-pygideprecationwarnings.patch
 pexip/basic-auth-validate-base64.patch
 pexip/generalize-represents_eof-detection.patch
+pexip/pyopenssl-autonegotiate-only.patch
