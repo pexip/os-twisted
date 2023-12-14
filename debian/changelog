@@ -1,3 +1,10 @@
+twisted (22.4.0-4pexip8) pexip-bookworm; urgency=medium
+
+  * Re-add pexip/pyopenssl-autonegotiate-only.patch from
+    0033-pyopenssl-autonegotiate-only.patch
+
+ -- John-Mark Bell <jmb@pexip.com>  Thu, 14 Dec 2023 13:25:23 +0000
+
 twisted (22.4.0-4pexip7) pexip-bookworm; urgency=medium
 
   * Fix up basic-auth-validate-base64.patch.
