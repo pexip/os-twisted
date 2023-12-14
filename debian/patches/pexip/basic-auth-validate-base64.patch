@@ -2,22 +2,26 @@ Index: os-twisted/src/twisted/web/_auth/basic.py
 ===================================================================
 --- os-twisted.orig/src/twisted/web/_auth/basic.py
 +++ os-twisted/src/twisted/web/_auth/basic.py
-@@ -11,6 +11,7 @@ HTTP BASIC authentication.
+@@ -11,7 +11,7 @@ HTTP BASIC authentication.
  """
  
  
+-import binascii
 +import base64
- import binascii
  
  from zope.interface import implementer
-@@ -47,7 +48,9 @@ class BasicCredentialFactory:
+ 
+@@ -47,8 +47,11 @@ class BasicCredentialFactory:
          L{credentials.UsernamePassword} instance.
          """
          try:
 -            creds = binascii.a2b_base64(response + b"===")
-+            creds = binascii.a2b_base64(
-+                response + b"=" * (-len(response) % 4), validate=True,
+-        except binascii.Error:
++            creds = base64.b64decode(
++                response + b"=" * (-len(response) % 4),
++                validate=True,
 +            )
-         except binascii.Error:
++        except ValueError:
              raise error.LoginFailed("Invalid credentials")
  
+         creds = creds.split(b":", 1)

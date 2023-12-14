@@ -1,3 +1,9 @@
+twisted (22.4.0-4pexip7) pexip-bookworm; urgency=medium
+
+  * Fix up basic-auth-validate-base64.patch.
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Thu, 14 Dec 2023 11:59:30 +0000
+
 twisted (22.4.0-4pexip6) pexip-bookworm; urgency=medium
 
   * Commit previous fix.
