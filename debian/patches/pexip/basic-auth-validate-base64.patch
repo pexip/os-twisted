@@ -1,15 +1,16 @@
---- a/src/twisted/web/_auth/basic.py
-+++ b/src/twisted/web/_auth/basic.py
-@@ -11,7 +11,7 @@
+Index: os-twisted/src/twisted/web/_auth/basic.py
+===================================================================
+--- os-twisted.orig/src/twisted/web/_auth/basic.py
++++ os-twisted/src/twisted/web/_auth/basic.py
+@@ -11,6 +11,7 @@ HTTP BASIC authentication.
  """
  
  
--import binascii
 +import base64
+ import binascii
  
  from zope.interface import implementer
- 
-@@ -47,7 +47,9 @@
+@@ -47,7 +48,9 @@ class BasicCredentialFactory:
          L{credentials.UsernamePassword} instance.
          """
          try:

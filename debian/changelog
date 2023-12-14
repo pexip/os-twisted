@@ -1,3 +1,9 @@
+twisted (22.4.0-4pexip6) pexip-bookworm; urgency=medium
+
+  * Commit previous fix.
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Thu, 14 Dec 2023 11:32:40 +0000
+
 twisted (22.4.0-4pexip5) pexip-bookworm; urgency=medium
 
   * Fix up import in generalize-represents_eof-detection.patch
