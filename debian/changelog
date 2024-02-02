@@ -1,3 +1,9 @@
+twisted (22.4.0-4+pexip24u9) pexip-bookworm; urgency=medium
+
+  * Initial bookworm build
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Fri, 02 Feb 2024 10:28:06 +0000
+
 twisted (22.4.0-4pexip8) pexip-bookworm; urgency=medium
 
   * Re-add pexip/pyopenssl-autonegotiate-only.patch from
