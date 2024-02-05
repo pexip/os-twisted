@@ -1,0 +1,89 @@
+# Undo a broken change upstream
+# See discussion in https://github.com/twisted/twisted/issues/9777
+diff --git a/src/twisted/internet/inotify.py b/src/twisted/internet/inotify.py
+index 6b18107..6b8d9db 100644
+--- a/src/twisted/internet/inotify.py
++++ b/src/twisted/internet/inotify.py
+@@ -287,7 +287,6 @@ class INotify(FileDescriptor):
+                 self.reactor.callLater(0, self._addChildren, self._watchpoints[new_wd])
+             if mask & IN_DELETE_SELF:
+                 self._rmWatch(wd)
+-                self.loseConnection()
+ 
+     def _addChildren(self, iwp):
+         """
+diff --git a/src/twisted/internet/test/test_inotify.py b/src/twisted/internet/test/test_inotify.py
+index 0d38f7a..505f5b8 100644
+--- a/src/twisted/internet/test/test_inotify.py
++++ b/src/twisted/internet/test/test_inotify.py
+@@ -218,28 +218,6 @@ class INotifyTests(unittest.TestCase):
+             inotify.IN_DELETE_SELF, operation, expectedPath=self.dirname
+         )
+ 
+-    def test_deleteSelfForced(self):
+-        """
+-        Deleting the monitored directory itself sends an
+-        C{inotify.IN_DELETE_SELF} event to the callback
+-        even if the mask isn't specified by the call to watch().
+-        """
+-
+-        def cbNotified(result):
+-            (watch, filename, events) = result
+-            self.assertEqual(filename.asBytesMode(), self.dirname.asBytesMode())
+-            self.assertTrue(events & inotify.IN_DELETE_SELF)
+-
+-        self.inotify.watch(
+-            self.dirname, mask=0x0, callbacks=[lambda *args: d.callback(args)]
+-        )
+-
+-        d = defer.Deferred()
+-        d.addCallback(cbNotified)
+-
+-        self.dirname.remove()
+-        return d
+-
+     def test_moveSelf(self):
+         """
+         Renaming the monitored directory itself sends an
+@@ -322,41 +300,6 @@ class INotifyTests(unittest.TestCase):
+         subdir.createDirectory()
+         return d
+ 
+-    def test_deleteSelfLoseConnection(self):
+-        """
+-        L{inotify.INotify} closes the file descriptor after removing a
+-        directory from the filesystem (and therefore from the watchlist).
+-        """
+-
+-        def cbNotified(result):
+-            def _():
+-                try:
+-                    self.assertFalse(self.inotify._isWatched(self.dirname))
+-                    self.assertFalse(self.inotify.connected)
+-                    d.callback(None)
+-                except Exception:
+-                    d.errback()
+-
+-            (ignored, filename, events) = result
+-            self.assertEqual(filename.asBytesMode(), self.dirname.asBytesMode())
+-            self.assertTrue(events & inotify.IN_DELETE_SELF)
+-            reactor.callLater(0, _)
+-
+-        self.assertTrue(
+-            self.inotify.watch(
+-                self.dirname,
+-                mask=inotify.IN_DELETE_SELF,
+-                callbacks=[lambda *args: notified.callback(args)],
+-            )
+-        )
+-
+-        notified = defer.Deferred()
+-        notified.addCallback(cbNotified)
+-
+-        self.dirname.remove()
+-        d = defer.Deferred()
+-        return d
+-
+     def test_ignoreDirectory(self):
+         """
+         L{inotify.INotify.ignore} removes a directory from the watchlist
