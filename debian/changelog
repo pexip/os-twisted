@@ -1,4 +1,4 @@
-twisted (22.4.0-4+pexip24u10) pexip-bookworm; urgency=medium
+twisted (22.4.0-4+pexip24u10) pexip; urgency=medium
 
   * Fix broken upstream change in inotify
 
