@@ -30,3 +30,6 @@ Fix-references-to-twisted.pages.patch
 Call-the-superclass-constructor-via-private-alias.patch
 twisted.web.pages.-ErrorPage-errorPage.patch
 Add-CVE-to-newsfragment.patch
+CVE-2024-41671.patch
+CVE-2024-41810.patch
+CVE-2023-46137.patch
