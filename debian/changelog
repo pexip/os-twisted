@@ -1,3 +1,17 @@
+twisted (22.4.0-4+pexip24u11+deb12u1) pexip; urgency=medium
+
+  * New upstream release with security fixes
+
+ -- Steve McIntyre <steve.mcintyre@pexip.com>  Sun, 03 Nov 2024 16:15:15 +0000
+
+twisted (22.4.0-4+deb12u1) bookworm-security; urgency=medium
+
+  * CVE-2024-41671 (Closes: #1077679)
+  * CVE-2024-41810 (Closes: #1077680)
+  * CVE-2023-46137 (Closes: #1054913)
+
+ -- Moritz Mühlenhoff <jmm@debian.org>  Tue, 27 Aug 2024 20:36:02 +0200
+
 twisted (22.4.0-4+pexip24u10) pexip; urgency=medium
 
   * Fix broken upstream change in inotify
