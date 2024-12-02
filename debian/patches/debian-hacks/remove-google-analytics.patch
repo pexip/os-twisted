@@ -1,0 +1,26 @@
+From: Colin Watson <cjwatson@debian.org>
+Date: Wed, 14 Aug 2024 23:29:02 +0100
+Subject: Remove Google Analytics tracker from documentation
+
+---
+ src/twisted/python/_pydoctortemplates/subheader.html | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/src/twisted/python/_pydoctortemplates/subheader.html b/src/twisted/python/_pydoctortemplates/subheader.html
+index 7db8ac4..7a2becf 100644
+--- a/src/twisted/python/_pydoctortemplates/subheader.html
++++ b/src/twisted/python/_pydoctortemplates/subheader.html
+@@ -5,13 +5,6 @@
+     </a>
+   </div>
+ 
+-  <!-- Google analytics, obviously. -->
+-  <script src="//www.google-analytics.com/urchin.js" type="text/javascript"></script>
+-  <script type="text/javascript">
+-    _uacct = "UA-99018-6";
+-    urchinTracker();
+-  </script>
+-
+   <!-- If the documentation isn't current, insert a current link. -->
+   <script type="text/javascript">
+     if (window.location.pathname.indexOf('/current/') == -1) {
