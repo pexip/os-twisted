@@ -1,9 +1,9 @@
---- a/src/twisted/web/http.py
-+++ b/src/twisted/web/http.py
-@@ -3236,7 +3236,7 @@
+--- twisted.orig/src/twisted/web/http.py
++++ twisted/src/twisted/web/http.py
+@@ -3389,7 +3389,7 @@ class HTTPFactory(protocol.ServerFactory
          self._logDateTimeCall = self.reactor.callLater(1, self._updateLogDateTime)
  
-     def buildProtocol(self, addr):
+     def buildProtocol(self, addr: IAddress) -> Protocol | None:
 -        p = protocol.ServerFactory.buildProtocol(self, addr)
 +        p = super(protocol.ServerFactory, self).buildProtocol(addr)
  

@@ -1,8 +1,6 @@
-diff --git a/src/twisted/internet/_sslverify.py b/src/twisted/internet/_sslverify.py
-index c44ec14..3940bf6 100644
---- a/src/twisted/internet/_sslverify.py
-+++ b/src/twisted/internet/_sslverify.py
-@@ -1633,8 +1633,29 @@ class OpenSSLCertificateOptions(object):
+--- twisted.orig/src/twisted/internet/_sslverify.py
++++ twisted/src/twisted/internet/_sslverify.py
+@@ -1634,8 +1634,29 @@ class OpenSSLCertificateOptions:
          return self._context
  
      def _makeContext(self):
@@ -34,11 +32,9 @@ index c44ec14..3940bf6 100644
          ctx.set_mode(self._mode)
  
          if self.certificate is not None and self.privateKey is not None:
-diff --git a/src/twisted/protocols/test/test_tls.py b/src/twisted/protocols/test/test_tls.py
-index 209e0e9..aa661e3 100644
---- a/src/twisted/protocols/test/test_tls.py
-+++ b/src/twisted/protocols/test/test_tls.py
-@@ -19,6 +19,10 @@ try:
+--- twisted.orig/src/twisted/protocols/test/test_tls.py
++++ twisted/src/twisted/protocols/test/test_tls.py
+@@ -27,6 +27,10 @@ try:
          Connection,
          Context,
          Error,
@@ -49,17 +45,17 @@ index 209e0e9..aa661e3 100644
          TLSv1_1_METHOD,
          TLSv1_2_METHOD,
          TLSv1_METHOD,
-@@ -34,7 +38,9 @@
+@@ -43,7 +47,9 @@ try:
  except ImportError:
      # Skip the whole test module if it can't be imported.
      skip = "pyOpenSSL 16.0.0 or newer required for twisted.protocol.tls"
 +    SSLv23_METHOD = None
-     TLSv1_METHOD = TLSv1_1_METHOD = TLSv1_2_METHOD = None  # type: ignore[assignment]
+     TLS_METHOD = TLSv1_METHOD = TLSv1_1_METHOD = TLSv1_2_METHOD = None  # type: ignore[assignment]
 +    TLS1_VERSION = TLS1_1_VERSION = TLS1_2_VERSION = 0
  else:
      from twisted.internet.ssl import PrivateCertificate, optionsForClientTLS
      from twisted.test.ssl_helpers import ClientTLSContext, ServerTLSContext, certPath
-@@ -105,7 +111,16 @@ class HandshakeCallbackContextFactory:
+@@ -110,7 +116,16 @@ class HandshakeCallbackContextFactory:
          Create and return an SSL context configured to use L{self._info} as the
          info callback.
          """
@@ -77,11 +73,9 @@ index 209e0e9..aa661e3 100644
          context.set_info_callback(self._info)
          return context
  
-diff --git a/src/twisted/test/ssl_helpers.py b/src/twisted/test/ssl_helpers.py
-index fdf2715..d56ab07 100644
---- a/src/twisted/test/ssl_helpers.py
-+++ b/src/twisted/test/ssl_helpers.py
-@@ -57,7 +57,16 @@ class ServerTLSContext:
+--- twisted.orig/src/twisted/test/ssl_helpers.py
++++ twisted/src/twisted/test/ssl_helpers.py
+@@ -60,7 +60,16 @@ class ServerTLSContext:
          This is done to improve the test coverage as most implementation
          are caching the context.
          """
