@@ -1,3 +1,9 @@
+twisted (24.11.0-1+pexip25u1) pexip-trixie; urgency=medium
+
+  * Initial trixie build
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Tue, 29 Apr 2025 22:59:24 +0100
+
 twisted (24.11.0-1) unstable; urgency=medium
 
   * New upstream release.
