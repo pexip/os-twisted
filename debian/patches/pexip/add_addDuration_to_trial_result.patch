@@ -1,0 +1,24 @@
+Newer python versions require TestResult objects to have an
+addDuration method to avoid throwing a RuntimeWarning
+
+Whilst the twisted TestResult inherits from the stdlib one,
+the adapter class was missing the relevant wiring.  This
+patch adds that.
+ 
+Index: twisted/src/twisted/trial/reporter.py
+===================================================================
+--- twisted.orig/src/twisted/trial/reporter.py
++++ twisted/src/twisted/trial/reporter.py
+@@ -344,6 +344,12 @@ class _AdaptedReporter(TestResultDecorat
+         test = self.testAdapter(test)
+         return self._originalReporter.addFailure(test, failure)
+ 
++    def addDuration(self, test, elapsed):
++        """
++        See L{itrial.IReporter}.
++        """
++        return self._originalReporter.addDuration(self.testAdapter(test), elapsed)
++
+     def addSkip(self, test, skip):
+         """
+         See L{itrial.IReporter}.
