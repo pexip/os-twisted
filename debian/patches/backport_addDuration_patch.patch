@@ -1,0 +1,84 @@
+Backport from upstream twisted to deal with trial
+
+commit d1da93654b14ba6870ce77ce77daf584451c2e8f
+Merge: 96554860ca 17132ba712
+Author: Glyph <glyph@twistedmatrix.com>
+Date:   Thu Dec 11 10:46:08 2025 -0800
+
+    Add addDuration to stop trial from complaining so much (#12550)
+
+Index: twisted/src/twisted/trial/_dist/distreporter.py
+===================================================================
+--- twisted.orig/src/twisted/trial/_dist/distreporter.py
++++ twisted/src/twisted/trial/_dist/distreporter.py
+@@ -18,13 +18,13 @@ from zope.interface import implementer
+ 
+ from twisted.python.components import proxyForInterface
+ from twisted.python.failure import Failure
+-from ..itrial import IReporter, ITestCase
++from ..itrial import IReporterWithDurations, ITestCase
+ 
+ ReporterFailure = Union[Failure, Tuple[type, Exception, TracebackType]]
+ 
+ 
+-@implementer(IReporter)
+-class DistReporter(proxyForInterface(IReporter)):  # type: ignore[misc]
++@implementer(IReporterWithDurations)
++class DistReporter(proxyForInterface(IReporterWithDurations)):  # type: ignore[misc]
+     """
+     See module docstring.
+     """
+Index: twisted/src/twisted/trial/itrial.py
+===================================================================
+--- twisted.orig/src/twisted/trial/itrial.py
++++ twisted/src/twisted/trial/itrial.py
+@@ -3,10 +3,9 @@
+ 
+ """
+ Interfaces for Trial.
+-
+-Maintainer: Jonathan Lange
+ """
+ 
++from unittest import TestCase
+ 
+ import zope.interface as zi
+ 
+@@ -155,3 +154,21 @@ class IReporter(zi.Interface):
+         L{IReporter} object, you should assume that the L{IReporter} object is
+         no longer usable.
+         """
++
++
++class IReporterWithDurations(IReporter):
++    """
++    The L{IReporter} interface with the 'durations' additions added to the
++    standard library in 3.12.
++    """
++
++    collectedDurations: list[tuple[str, float]] = zi.Attribute(
++        """
++        The collected durations of the tests reported.
++        """
++    )
++
++    def addDuration(test: TestCase, elapsed: float) -> None:
++        """
++        Collect a duration for C{test} into L{IReporterWithDurations.collectedDurations}.
++        """
+Index: twisted/src/twisted/trial/reporter.py
+===================================================================
+--- twisted.orig/src/twisted/trial/reporter.py
++++ twisted/src/twisted/trial/reporter.py
+@@ -250,9 +250,9 @@ class TestResult(pyunit.TestResult):
+         """
+ 
+ 
+-@implementer(itrial.IReporter)
++@implementer(itrial.IReporterWithDurations)
+ class TestResultDecorator(
+-    proxyForInterface(itrial.IReporter, "_originalReporter")  # type: ignore[misc]
++    proxyForInterface(itrial.IReporterWithDurations, "_originalReporter")  # type: ignore[misc]
+ ):
+     """
+     Base class for TestResult decorators.

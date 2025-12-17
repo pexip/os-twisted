@@ -21,4 +21,4 @@ pexip/twisted-issue-9462.patch
 pexip/basic-auth-validate-base64.patch
 pexip/pyopenssl-autonegotiate-only.patch
 pexip/fix-inotify-loseconnection-bug.patch
-pexip/add_addDuration_to_trial_result.patch
+backport_addDuration_patch.patch
