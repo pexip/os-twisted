@@ -1,3 +1,9 @@
+twisted (22.4.0-4+pexip24u12+deb12u1) pexip; urgency=medium
+
+  * Monkey patch in pygtkcompat for compatibilty with newer media builds.
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Mon, 16 Feb 2026 11:01:16 +0000
+
 twisted (22.4.0-4+pexip24u11+deb12u1) pexip; urgency=medium
 
   * New upstream release with security fixes

@@ -46,3 +46,4 @@ pexip/basic-auth-validate-base64.patch
 pexip/generalize-represents_eof-detection.patch
 pexip/pyopenssl-autonegotiate-only.patch
 pexip/fix-inotify-loseconnection-bug.patch
+999_pexip_monkeypatch_pygtkcompat.patch
