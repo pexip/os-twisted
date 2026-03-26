@@ -1,0 +1,34 @@
+Bandaid for the issue reported in
+
+https://github.com/twisted/twisted/issues/12181
+
+without any upstream progress.
+
+We've seen this ourselves recently in
+
+https://github.com/pexip/mcu/issues/32890
+
+after the trixie upgrade. This error path can clearly happen in the
+wild for us, let's not crash here!
+
+diff --git a/src/twisted/protocols/tls.py b/src/twisted/protocols/tls.py
+index be7a58c..e12f850 100644
+--- a/src/twisted/protocols/tls.py
++++ b/src/twisted/protocols/tls.py
+@@ -118,8 +118,14 @@ def _representsEOF(exceptionObject: Error) -> bool:
+     if isinstance(exceptionObject, SysCallError):
+         _, reasonString = exceptionObject.args
+     else:
+-        errorQueue = exceptionObject.args[0]
+-        _, _, reasonString = errorQueue[-1]
++        try:
++            errorQueue = exceptionObject.args[0]
++            _, _, reasonString = errorQueue[-1]
++        # ZeroReturnError will come through this path with no
++        # arguments - let's not go bang!
++        # https://github.com/twisted/twisted/issues/12181
++        except IndexError:
++            return True
+     return reasonString.casefold().startswith("unexpected eof")
+ 
+ 
