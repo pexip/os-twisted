@@ -1,3 +1,4 @@
+make twisted work with modern pyOpenSSL versions
 --- twisted.orig/src/twisted/internet/_sslverify.py
 +++ twisted/src/twisted/internet/_sslverify.py
 @@ -1634,8 +1634,29 @@ class OpenSSLCertificateOptions:

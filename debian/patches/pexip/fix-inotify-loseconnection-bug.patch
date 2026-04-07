@@ -1,5 +1,5 @@
-# Undo a broken change upstream
-# See discussion in https://github.com/twisted/twisted/issues/9777
+inotify/delete: revert broken change introduced in upstream
+See discussion in https://github.com/twisted/twisted/issues/9777
 diff --git a/src/twisted/internet/inotify.py b/src/twisted/internet/inotify.py
 index 6b18107..6b8d9db 100644
 --- a/src/twisted/internet/inotify.py

@@ -1,3 +1,4 @@
+Force trial TestCase to run tearDown/cleanups in the same order as Python unittest does.
 --- a/src/twisted/trial/_asynctest.py
 +++ b/src/twisted/trial/_asynctest.py
 @@ -154,8 +154,8 @@

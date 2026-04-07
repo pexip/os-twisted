@@ -1,4 +1,6 @@
-https://twistedmatrix.com/trac/ticket/9462#comment:16
+Fix AttributeError on HTTP TLS timeout
+
+See https://github.com/twisted/twisted/issues/9462#issuecomment-1168369771
 
 --- a/src/twisted/protocols/tls.py
 +++ b/src/twisted/protocols/tls.py

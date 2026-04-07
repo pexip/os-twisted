@@ -1,12 +1,4 @@
-From 25bb048682292bb17c344e9a67921c3af3b439ae Mon Sep 17 00:00:00 2001
-From: Huw Jones <huw@pexip.com>
-Date: Tue, 1 Mar 2022 10:49:47 +0000
-Subject: [PATCH] defer: add extra diagnostics
-
----
- src/twisted/internet/defer.py | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
+twisted.internet.defer: add extra diagnostics to aid debugging reactor stalls
 --- a/src/twisted/internet/defer.py
 +++ b/src/twisted/internet/defer.py
 @@ -1102,7 +1102,7 @@
