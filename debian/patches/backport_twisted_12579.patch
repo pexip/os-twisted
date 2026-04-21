@@ -1,0 +1,100 @@
+Index: twisted/src/twisted/internet/defer.py
+===================================================================
+--- twisted.orig/src/twisted/internet/defer.py
++++ twisted/src/twisted/internet/defer.py
+@@ -17,7 +17,7 @@ from asyncio import AbstractEventLoop, F
+ from contextvars import Context as _Context, copy_context as _copy_context
+ from enum import Enum
+ from functools import wraps
+-from sys import exc_info, implementation
++from sys import exc_info
+ from types import CoroutineType, GeneratorType, MappingProxyType, TracebackType
+ from typing import (
+     TYPE_CHECKING,
+@@ -48,7 +48,7 @@ from typing import Concatenate, Literal,
+ from twisted.internet.interfaces import IDelayedCall, IReactorTime
+ from twisted.logger import Logger
+ from twisted.python import lockfile
+-from twisted.python.compat import _PYPY, cmp, comparable
++from twisted.python.compat import cmp, comparable
+ from twisted.python.deprecate import deprecated, warnAboutFunction
+ from twisted.python.failure import Failure, _extraneous
+ 
+@@ -58,9 +58,6 @@ log = Logger()
+ _T = TypeVar("_T")
+ _P = ParamSpec("_P")
+ 
+-# See use in _inlineCallbacks for explanation and removal timeline.
+-_oldPypyStack = _PYPY and implementation.version < (7, 3, 14)
+-
+ 
+ class AlreadyCalledError(Exception):
+     """
+@@ -1342,7 +1339,7 @@ def ensureDeferred(
+         Coroutine[Deferred[Any], Any, _T],
+         Generator[Deferred[Any], Any, _T],
+         Deferred[_T],
+-    ]
++    ],
+ ) -> Deferred[_T]:
+     """
+     Schedule the execution of a coroutine that awaits/yields from L{Deferred}s,
+@@ -2030,27 +2027,18 @@ def _inlineCallbacks(
+             # The traceback starts in this frame (the one for
+             # _inlineCallbacks); the next one down should be the application
+             # code.
+-            excInfo = exc_info()
+-            assert excInfo is not None
+-
+-            traceback = excInfo[2]
+-            assert traceback is not None
++            appCodeTrace: TracebackType
+ 
+-            appCodeTrace = traceback.tb_next
+-            assert appCodeTrace is not None
+-
+-            if _oldPypyStack:
+-                # PyPy versions through 7.3.13 add an extra frame; 7.3.14 fixed
+-                # this discrepancy with CPython.  This code can be removed once
+-                # we no longer need to support PyPy 7.3.13 or older.
+-                appCodeTrace = appCodeTrace.tb_next
+-                assert appCodeTrace is not None
++            # Here and everywhere below, we ignore the theoretical possibility
++            # that this is the end of the traceback (it can effectively never
++            # be).
++            appCodeTrace = exc_info()[2].tb_next  # type:ignore[union-attr,assignment]
+ 
+             if isFailure:
+                 # If we invoked this generator frame by throwing an exception
+                 # into it, then throwExceptionIntoGenerator will consume an
+                 # additional stack frame itself, so we need to skip that too.
+-                appCodeTrace = appCodeTrace.tb_next
++                appCodeTrace = appCodeTrace.tb_next  # type:ignore[assignment]
+                 assert appCodeTrace is not None
+ 
+             # Now that we've identified the frame being exited by the
+@@ -2189,7 +2177,7 @@ def _cancellableInlineCallbacks(
+     gen: Union[
+         Generator[Deferred[Any], object, _T],
+         Coroutine[Deferred[Any], object, _T],
+-    ]
++    ],
+ ) -> Deferred[_T]:
+     """
+     Make an C{@}L{inlineCallbacks} cancellable.
+@@ -2216,7 +2204,7 @@ class _InternalInlineCallbacksCancelledE
+ 
+ 
+ def inlineCallbacks(
+-    f: Callable[_P, Generator[Deferred[Any], Any, _T]]
++    f: Callable[_P, Generator[Deferred[Any], Any, _T]],
+ ) -> Callable[_P, Deferred[_T]]:
+     """
+     L{inlineCallbacks} helps you write L{Deferred}-using code that looks like a
+Index: twisted/src/twisted/newsfragments/12120.bugfix
+===================================================================
+--- /dev/null
++++ twisted/src/twisted/newsfragments/12120.bugfix
+@@ -0,0 +1,2 @@
++A potential reference cycle that might cause intermittent memory spikes while
++using twisted.internet.defer.inlineCallbacks was removed.

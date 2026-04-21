@@ -23,3 +23,4 @@ pexip/pyopenssl-autonegotiate-only.patch
 pexip/fix-inotify-loseconnection-bug.patch
 pexip/fix-ZeroReturnError-handling.patch
 backport_addDuration_patch.patch
+backport_twisted_12579.patch
