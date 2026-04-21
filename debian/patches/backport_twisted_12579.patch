@@ -1,3 +1,8 @@
+Backport patch from upstream to help with garbage collection
+when defer.inlineCallbacks is used.
+
+From https://github.com/twisted/twisted/pull/12579
+
 Index: twisted/src/twisted/internet/defer.py
 ===================================================================
 --- twisted.orig/src/twisted/internet/defer.py
