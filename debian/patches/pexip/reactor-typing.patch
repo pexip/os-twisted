@@ -1,0 +1,37 @@
+Gives twisted.internet.reactor a type to help with mypy
+
+Partial import of https://github.com/twisted/twisted/commit/d5961c8504410ea58bc44cb4d8198ef2aef3d3a6
+
+--- a/src/twisted/internet/__init__.py
++++ b/src/twisted/internet/__init__.py
+@@ -10,3 +10,30 @@ observers need not care about which even
+ to use the same code for different loops, from Twisted's basic, yet portable,
+ select-based loop to the loops of various GUI toolkits like GTK+ or Tk.
+ """
++
++from typing import TYPE_CHECKING
++
++if TYPE_CHECKING:
++    from .interfaces import (
++        IReactorCore,
++        IReactorFDSet,
++        IReactorProcess,
++        IReactorTCP,
++        IReactorTime,
++    )
++
++    class _IReactorCommon(
++        IReactorCore,
++        IReactorTime,
++        IReactorFDSet,
++        IReactorTCP,
++        IReactorProcess,
++    ):
++        """
++        A make-believe interface supporting all the commonly-implemented parts
++        of the reactor.  For other interfaces which may or may not be supplied
++        by the environment, i.e. IReactorSSL, adapt the reactor like
++        C{IReactorSSL(reactor)}.
++        """
++
++    reactor: _IReactorCommon
