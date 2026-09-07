@@ -1,3 +1,9 @@
+twisted (24.11.0-1+pexip25u7) pexip-trixie; urgency=medium
+
+  * Gives twisted.internet.reactor a type to help with mypy
+
+ -- Michael Oultram <michael.oultram@pexip.com>  Mon, 07 Sep 2026 17:12:26 +0100
+
 twisted (24.11.0-1+pexip25u6) pexip-trixie; urgency=medium
 
   * Backport upstream patch from PR #12579
